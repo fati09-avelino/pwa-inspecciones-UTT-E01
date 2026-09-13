@@ -39,4 +39,16 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Limitación:** Los estados de carga y error son representaciones visuales activadas manualmente; no reflejan aún una llamada de red real, ya que el manifiesto y las pruebas automatizadas todavía no estaban integrados en el momento de este commit.
 * **Uso de IA:** Usé Claude (Anthropic) como apoyo para generar una primera versión de app-shell.tsx, page.tsx y los estilos asociados en globals.css, siguiendo la estructura y clases ya existentes del proyecto de la Semana 1. Revisé y probé el código localmente (npm run dev, npm run build, navegación por teclado) para confirmar que cumple los requisitos antes de integrarlo y puedo explicar cada decisión de implementación.
 
+
+## Integrante 1: Fatima Avelino Celis
+* **Contribución:** Configuración del archivo de manifiesto PWA (`public/manifest.webmanifest`), diseño, redimensionamiento y colocación de los iconos obligatorios (`192x192` y `512x512`) en la ruta `public/icons/`, e integración de los metadatos en `src/app/layout.tsx` de Next.js.
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/eb40e73acc19ab130dd4537107fe2f5396c2c688
+* **Decisión explicada:** Se decidió configurar el archivo de manifiesto con el modo de visualización `standalone` y colores corporativos acordes al sistema de inspecciones de la UTT, asegurando que el navegador reconozca la aplicación como instalable tanto en equipos de escritorio como en dispositivos móviles.
+* **Comando/Prueba ejecutada:** `npm run test` y validación local en Chrome DevTools (Application > Manifest).
+* **Resultado real:** pass. El manifiesto y los iconos fueron detectados correctamente sin errores de ruta (404) ni advertencias de dimensiones.
+* **Qué comprueba y qué no:** Comprueba que la estructura sintáctica del archivo `manifest.webmanifest` es válida, que los iconos de 192x192 y 512x512 existen físicamente en las rutas correctas y que la PWA es elegible para instalación. No comprueba la lógica de almacenamiento en caché ni el funcionamiento sin conexión mediante Service Workers.
+* **Limitación:** Las pruebas automáticas no validan la experiencia de usuario interactiva tras la instalación ni el comportamiento de red en entornos con conectividad intermitente real.
+* **Uso de IA:** Usé Gemini como guía para verificar las propiedades requeridas en el manifiesto PWA de Next.js y los tamaños exactos de redimensionamiento de los iconos, realizando una revisión y validación manual directa en el navegador.
+
+
 > No necesitan inventar un error ni escribir pruebas nuevas. «Ejecuté npm test» es insuficiente como explicación: indiquen qué observa la prueba y qué comportamiento queda fuera.
