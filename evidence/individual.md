@@ -18,14 +18,14 @@
 
 
 ## Integrante 2: Janeth Cabrera Arguelles
-* **Contribución:** Configuración inicial del repositorio privado, instalación de dependencias, ejecución de inspecciones locales, redacción de `requirements.md` y `decision-record.md`, y estructuración del proyecto.
-* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/2ab89bc0ff9cb0ab52c6c1a6d12d51885f454c4b
-* **Decisión explicada:** Se decidió utilizar datos sintéticos sobre laboratorios de la UTT para evitar manejar datos reales de inventario y cumplir con los lineamientos de privacidad de la práctica.
-* **Comando/Prueba ejecutada:** `npm run verify`
-* **Resultado real:** pass. El reporte `reports/verification.json` se generó exitosamente.
-* **Qué comprueba y qué no:** Comprueba que el proyecto compila, que los archivos requeridos existen y que las pruebas sintéticas pasan. No comprueba si el análisis documental es profundo o si los datos ficticios tienen sentido semántico.
-* **Limitación:** El comando no revisa si las invitaciones de GitHub a los colaboradores ya fueron aceptadas.
-* **Uso de IA:** Usé Gemini/ChatGPT como guía para estructurar y redactar los escenarios en requirements.md y la tabla en decision-record.md, realizando una revisión humana para confirmar que cumple con los criterios de la rúbrica AC-02.
+* **Contribución:** Configuración base del entorno para la Semana 02 (Fase 1), actualización e integración del script de verificación pública (`public-tests/check.sh`), estandarización del `README.md` de la raíz con instrucciones de setup/ejecución/pruebas, actualización de los workflows de GitHub Actions y verificación de compilación limpia.
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/61bb613
+* **Decisión explicada:** Se actualizó el script `public-tests/check.sh` sustituyendo las reglas de la Semana 1 por la suite de comprobaciones de la Semana 2 (existencia de `manifest.webmanifest`, `app-shell.tsx`, `layout.tsx`, `page.tsx`, `manifest.spec.ts`, `README.md` y escaneo de secretos). Esto garantiza que el contrato mínimo de evaluación pública se valide de forma determinista antes de cada entrega.
+* **Comando/Prueba ejecutada:** `npm ci`, `npm run build` y `bash public-tests/check.sh`
+* **Resultado real:** pass. El proyecto compiló exitosamente (`✓ Compiled successfully`) y el script arrojó `PUBLIC_OK` tras la integración completa de los componentes del equipo.
+* **Qué comprueba y qué no:** Comprueba que la instalación de dependencias sea limpia e inmutable, que Next.js compile las páginas estáticas sin errores de sintaxis/tipado y que la estructura física de los artefactos obligatorios exista. No comprueba el diseño visual, accesibilidad CSS ni el comportamiento de los Service Workers.
+* **Limitación:** El primer pipeline en GitHub Actions reflejó un fallo esperado en el criterio AC-02 (falta de componentes) antes de que el equipo integrara las Fases 2 y 3; la validación completa dependía de los commits subsecuentes.
+* **Uso de IA:** Usé Gemini como asistencia para el diagnóstico de errores de entorno, validación de sintaxis en scripts Bash para Windows/Linux y estructuración del `README.md`. Realicé la validación humana probando manualmente la instalación limpia, la ejecución de scripts en terminal local y la verificación en GitHub.
 
 
 ## Integrante 3: Hector Ulises Cacho Gonzalez
