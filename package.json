@@ -2,11 +2,12 @@
   "name": "pwa-inspecciones-laboratorio",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-"test": "node tests/starter.spec.mjs && node tests/manifest.spec.mjs && node --import ./tests/register-ts-loader.mjs --test tests/service-worker.spec.ts && node --import ./tests/register-ts-loader.mjs --test tests/offline.spec.ts"   },
+  "scripts": { "dev": "next dev", 
+  "build": "next build", 
+  "start": "next start", 
+  "test": "node tests/starter.spec.mjs && node tests/manifest.spec.mjs && node --import ./tests/register-ts-loader.mjs --test tests/service-worker.spec.ts && node --import ./tests/register-ts-loader.mjs --test tests/offline.spec.ts", 
+  "verify": "node scripts/verify.mjs" 
+},
   "dependencies": {
     "next": "14.2.35",
     "react": "18.3.1",
