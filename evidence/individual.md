@@ -66,7 +66,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 
 ## Integrante 2: Janeth Cabrera Arguelles
 * **Contribución:** Redacción de la estrategia de caché y políticas de consistencia offline (`docs/cache-strategy.md`), actualización del `README.md` de la raíz con las instrucciones de setup/ejecución (`npm run dev`) y verificación para la Semana 03, y mantenimiento de los contratos de prueba pública.
-* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/b470aa54f9771e4e330b402bd402e101aa9bf930
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/eb89aa7
 * **Decisión explicada:** Se estructuró la estrategia de almacenamiento definiendo una política *Network First* para la navegación de páginas y *Cache First* / *Stale-While-Revalidate* para los recursos estáticos del App Shell. Esta decisión permite visualizar la versión más reciente del sistema cuando hay conectividad disponible, garantizando al mismo tiempo una respuesta fluida mediante respuestas de respaldo cuando el dispositivo se queda sin red.
 * **Comando/Prueba ejecutada:** `npm ci`, `npm run dev`, `npm run build` y `bash public-tests/check.sh`
 * **Resultado real:** pass. El proyecto realiza la instalación de dependencias de forma inmutable, compila estáticamente sin errores (`✓ Compiled successfully`) y el script de verificación valida la existencia de los artefactos obligatorios de la Semana 03 (AC-02).
