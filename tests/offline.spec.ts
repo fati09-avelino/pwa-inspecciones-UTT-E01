@@ -1,13 +1,3 @@
-// tests/offline.spec.ts
-//
-// Pruebas centradas en el comportamiento SIN CONEXIÓN:
-// 1. Cuando la red falla durante una navegación, sw.js debe servir un
-//    fallback desde caché en lugar de dejar que el error se propague.
-// 2. src/lib/pwa/register-service-worker.ts no debe romperse cuando se
-//    ejecuta en un entorno sin "window" (p. ej. renderizado en servidor de
-//    Next.js), y sí debe registrar el service worker cuando el navegador
-//    lo soporta.
-
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -17,16 +7,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SW_PATH = path.join(__dirname, "..", "public", "sw.js");
-const REGISTER_PATH = path.join(
-  __dirname,
-  "..",
-  "src",
-  "lib",
-  "pwa",
-  "register-service-worker.ts"
-);
-// import() exige una URL file:// válida; en Windows una ruta como
-// "C:\...\archivo.ts" no es una URL válida, por eso se convierte.
+const REGISTER_PATH = path.join(__dirname, "..", "src", "lib", "pwa", "register-service-worker.ts");
 const REGISTER_URL = pathToFileURL(REGISTER_PATH).href;
 
 function loadServiceWorkerForOfflineTest() {
@@ -78,7 +59,6 @@ function loadServiceWorkerForOfflineTest() {
   sandbox.self = sandbox;
 
   vm.runInContext(source, vm.createContext(sandbox), { filename: "public/sw.js" });
-
   return { listeners, caches, setNetworkImpl: (fn) => (networkImpl = fn) };
 }
 
@@ -96,33 +76,20 @@ function fakeEvent(overrides = {}) {
 
 test("offline: si falla la red durante una navegación, sirve el fallback cacheado en vez de romperse", async () => {
   const sw = loadServiceWorkerForOfflineTest();
-
-  // Precachea el app shell (simula que el usuario ya visitó el sitio con conexión).
   const installEvt = fakeEvent();
   sw.listeners.install(installEvt);
   await Promise.all(installEvt._waitCalls);
 
-  // Simula estar sin conexión: cualquier intento de red falla.
   sw.setNetworkImpl(async () => {
     throw new TypeError("Failed to fetch");
   });
 
-  const navigationEvt = fakeEvent({
-    request: { url: "/inspecciones/nueva", method: "GET", mode: "navigate" }
-  });
+  const navigationEvt = fakeEvent({ request: { url: "/inspecciones/nueva", method: "GET", mode: "navigate" } });
   sw.listeners.fetch(navigationEvt);
-
   const response = await navigationEvt._respondCalls[0];
 
-  assert.ok(
-    response !== undefined,
-    "ante un fallo de red en una navegación, debe devolver el fallback offline (no undefined)"
-  );
-  assert.equal(
-    response.url,
-    "/",
-    "el fallback offline debe ser el app shell cacheado ('/')"
-  );
+  assert.ok(response !== undefined);
+  assert.equal(response.url, "/");
 });
 
 test("offline: una petición GET normal (no navegación) que falla en red no inventa una respuesta falsa", async () => {
@@ -131,25 +98,16 @@ test("offline: una petición GET normal (no navegación) que falla en red no inv
     throw new TypeError("Failed to fetch");
   });
 
-  const evt = fakeEvent({
-    request: { url: "/datos/no-cacheados.json", method: "GET", mode: "same-origin" }
-  });
+  const evt = fakeEvent({ request: { url: "/datos/no-cacheados.json", method: "GET", mode: "same-origin" } });
   sw.listeners.fetch(evt);
-
   const response = await evt._respondCalls[0];
-  assert.equal(
-    response,
-    undefined,
-    "sin caché, sin red y sin ser navegación, no debe fabricar una respuesta (evita servir datos incorrectos)"
-  );
+  assert.equal(response, undefined);
 });
 
 test("register-service-worker: no falla en un entorno sin 'window' (renderizado en servidor)", async () => {
   const originalWindow = globalThis.window;
   const originalNavigator = globalThis.navigator;
-  // @ts-expect-error: simular entorno de servidor sin window
   delete globalThis.window;
-  // @ts-expect-error
   delete globalThis.navigator;
 
   try {
@@ -164,17 +122,14 @@ test("register-service-worker: no falla en un entorno sin 'window' (renderizado 
 test("register-service-worker: registra el service worker cuando el navegador lo soporta", async () => {
   const originalWindow = globalThis.window;
   const originalNavigator = globalThis.navigator;
-
   let registeredWith = null;
   const listeners = {};
 
-  // @ts-expect-error: entorno simulado de navegador
   globalThis.window = {
     addEventListener: (type, handler) => {
       listeners[type] = handler;
     }
   };
-  // @ts-expect-error
   globalThis.navigator = {
     serviceWorker: {
       register: async (url) => {
@@ -187,11 +142,8 @@ test("register-service-worker: registra el service worker cuando el navegador lo
   try {
     const mod = await import(`${REGISTER_URL}?bust=${Date.now()}`);
     mod.registerServiceWorker();
-
-    assert.ok(typeof listeners.load === "function", "debe esperar al evento 'load' antes de registrar");
     await listeners.load();
-
-    assert.equal(registeredWith, "/sw.js", "debe registrar exactamente '/sw.js'");
+    assert.equal(registeredWith, "/sw.js");
   } finally {
     globalThis.window = originalWindow;
     globalThis.navigator = originalNavigator;

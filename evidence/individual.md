@@ -56,7 +56,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 
 ## Integrante 1: Fatima Avelino Celis
 * **Contribución:** Corrección de errores de tipado estricto en TypeScript dentro de `src/app/page.tsx`, actualización del modelo de datos en `src/lib/data/inspections.ts` (incorporando las propiedades requeridas `statusLabel`, `location`, `summary` y `findings`), y configuración robusta del Service Worker (`public/sw.js`) con manejo de excepciones en `cache.addAll` para garantizar la compilación de producción y el soporte sin conexión.
-* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/8fd905da53076a548fd7a1fda5d9b6a1f863b70a
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/847b0b006afc043b0371a0a1157071e7963d3c4f
 * **Decisión explicada:** Se implementó un control de excepciones con `.catch()` durante la fase de instalación del Service Worker para prevenir que una falla en el precacheado de recursos secundarios detuviera la ejecución, logrando un build limpio en producción (`npm run build`) y un registro exitoso en el navegador.
 * **Comando/Prueba ejecutada:** `npm run build`, `npm start` y validación manual del ciclo de vida del Service Worker (registro, estado *activated and is running* y prueba en modo *Offline*) en Chrome DevTools (Application > Service Workers).
 * **Resultado real:** pass. El comando `npm run build` completó de forma exitosa sin errores de tipado (`Compiled successfully`), y el Service Worker se activó correctamente en el navegador sin registrar estados redundantes.
@@ -76,7 +76,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 
  ## Integrante 3: Hector Ulises Cacho Gonzalez
 * **Contribución:** Implementación de las pruebas automatizadas de calidad para el Service Worker (`tests/service-worker.spec.ts` y `tests/offline.spec.ts`), cubriendo el ciclo de vida (`install`/`activate`), la estrategia de caché en `fetch` y el fallback offline, además de validar `src/lib/pwa/register-service-worker.ts` en entornos con y sin `window`.
-* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/8fd905da53076a548fd7a1fda5d9b6a1f863b70a 
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/eb89aa7
 * **Decisión explicada:** En lugar de verificar solo que los archivos existen o contienen cierto texto, monté un entorno simulado del `ServiceWorkerGlobalScope` (`self`, `caches`, `fetch`) usando el módulo `node:vm`, cargué el código real de `sw.js` dentro de ese entorno y disparé manualmente los eventos `install`, `activate` y `fetch`. Esta decisión permite que las pruebas verifiquen el comportamiento real del service worker (qué se cachea, qué se limpia, qué se sirve offline) en lugar de solo inspeccionar el código como texto, cumpliendo con el criterio de "pruebas de comportamiento" que pide la actividad.
 * **Comando/Prueba ejecutada:** `npm run test` (incluido dentro de `npm run verify`)
 * **Resultado real:** pass. Las 11 pruebas pasaron (2 heredadas de semanas anteriores + 5 de `service-worker.spec.ts` + 4 de `offline.spec.ts`), y `npm run build` compiló exitosamente (`✓ Compiled successfully`).
