@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node tests/starter.spec.mjs && node tests/manifest.spec.mjs",
-    "verify": "node scripts/verify.mjs"
+    "test": "node tests/starter.spec.mjs && node tests/manifest.spec.mjs && node --experimental-strip-types --test tests/service-worker.spec.ts && node --experimental-strip-types --test tests/offline.spec.ts","verify": "node scripts/verify.mjs"
   },
   "dependencies": {
     "next": "14.2.35",
