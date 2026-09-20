@@ -40,8 +40,10 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Uso de IA:** Usé Claude (Anthropic) como apoyo para generar una primera versión de app-shell.tsx, page.tsx y los estilos asociados en globals.css, siguiendo la estructura y clases ya existentes del proyecto de la Semana 1. Revisé y probé el código localmente (npm run dev, npm run build, navegación por teclado) para confirmar que cumple los requisitos antes de integrarlo y puedo explicar cada decisión de implementación.
 
 
+## SEMANA 2 
+
 ## Integrante 1: Fatima Avelino Celis
-* **Contribución:** Configuración del archivo de manifiesto PWA (`public/manifest.webmanifest`), diseño, redimensionamiento y colocación de los iconos obligatorios (`192x192` y `512x512`) en la ruta `public/icons/`, e integración de los metadatos en `src/app/layout.tsx` de Next.js.
+* **Contribución:** Configuración del archivo de manifiesto PWA (`public/manifest.webmanifest`), diseño, redimensionamiento y colocación de los iconos obligatorios (`192x192` y `512x512`) en la ruta `public/icons/`, en integración de los metadatos en `src/app/layout.tsx` de Next.js.
 * **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/eb40e73acc19ab130dd4537107fe2f5396c2c688
 * **Decisión explicada:** Se decidió configurar el archivo de manifiesto con el modo de visualización `standalone` y colores corporativos acordes al sistema de inspecciones de la UTT, asegurando que el navegador reconozca la aplicación como instalable tanto en equipos de escritorio como en dispositivos móviles.
 * **Comando/Prueba ejecutada:** `npm run test` y validación local en Chrome DevTools (Application > Manifest).
@@ -50,5 +52,16 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Limitación:** Las pruebas automáticas no validan la experiencia de usuario interactiva tras la instalación ni el comportamiento de red en entornos con conectividad intermitente real.
 * **Uso de IA:** Usé Gemini como guía para verificar las propiedades requeridas en el manifiesto PWA de Next.js y los tamaños exactos de redimensionamiento de los iconos, realizando una revisión y validación manual directa en el navegador.
 
+## SEMANA 3
+
+## Integrante 1: Fatima Avelino Celis
+* **Contribución:** Corrección de errores de tipado estricto en TypeScript dentro de `src/app/page.tsx`, actualización del modelo de datos en `src/lib/data/inspections.ts` (incorporando las propiedades requeridas `statusLabel`, `location`, `summary` y `findings`), y configuración robusta del Service Worker (`public/sw.js`) con manejo de excepciones en `cache.addAll` para garantizar la compilación de producción y el soporte sin conexión.
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/847b0b006afc043b0371a0a1157071e7963d3c4f
+* **Decisión explicada:** Se implementó un control de excepciones con `.catch()` durante la fase de instalación del Service Worker para prevenir que una falla en el precacheado de recursos secundarios detuviera la ejecución, logrando un build limpio en producción (`npm run build`) y un registro exitoso en el navegador.
+* **Comando/Prueba ejecutada:** `npm run build`, `npm start` y validación manual del ciclo de vida del Service Worker (registro, estado *activated and is running* y prueba en modo *Offline*) en Chrome DevTools (Application > Service Workers).
+* **Resultado real:** pass. El comando `npm run build` completó de forma exitosa sin errores de tipado (`Compiled successfully`), y el Service Worker se activó correctamente en el navegador sin registrar estados redundantes.
+* **Qué comprueba y qué no:** Comprueba que la aplicación compila óptimamente para producción con TypeScript, que el modelo de datos coincide con la interfaz de usuario y que el Service Worker administra de manera resiliente la caché y las solicitudes offline. No comprueba la persistencia de datos en bases de datos remotas ni flujos de autenticación.
+* **Limitación:** Las pruebas se ejecutaron en el entorno local (`localhost:3000`), por lo que no simulan la latencia de una red móvil real ni restricciones de almacenamiento en dispositivos físicos específicos.
+* **Uso de IA:** Usé Gemini como guía técnica para identificar los errores de tipado en TypeScript, estructurar correctamente los datos de inspecciones y robustecer el código del ciclo de vida del Service Worker mediante manejo seguro de promesas.
 
 > No necesitan inventar un error ni escribir pruebas nuevas. «Ejecuté npm test» es insuficiente como explicación: indiquen qué observa la prueba y qué comportamiento queda fuera.
