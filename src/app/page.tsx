@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { inspections as syntheticInspections } from "../lib/data/inspections";
+import { inspections as syntheticInspections } from '@/lib/data/inspections';
 import AppShell from "../components/app-shell";
 
 type ViewState = "loaded" | "loading" | "error" | "empty";

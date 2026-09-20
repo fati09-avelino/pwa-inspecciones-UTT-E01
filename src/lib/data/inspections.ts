@@ -1,46 +1,51 @@
-export type InspectionStatus = "ok" | "attention";
-
-export type Inspection = {
+export interface Inspection {
   id: string;
-  location: string;
+  laboratory: string;
+  status: 'Pendiente' | 'Completada' | 'En revisión';
+  statusLabel: string;
   date: string;
   inspector: string;
-  status: InspectionStatus;
-  statusLabel: string;
-  findings: number;
+  notes: string;
+  location: string;
   summary: string;
-};
+  findings: string; // <--- Añadir esta propiedad
+}
 
 export const inspections: Inspection[] = [
   {
-    id: "inspection-001",
-    location: "Laboratorio de Redes",
-    date: "2026-08-28",
-    inspector: "Técnica A",
-    status: "ok",
-    statusLabel: "Sin incidencias",
-    findings: 0,
-    summary: "Revisión visual de cableado, ventilación y estaciones de trabajo."
+    id: 'INS-001',
+    laboratory: 'Laboratorio de Redes y Ciberseguridad',
+    status: 'Pendiente',
+    statusLabel: 'Pendiente',
+    date: '2026-09-20',
+    inspector: 'Fátima',
+    notes: 'Revisión de puertos de red y parches de seguridad pendientes.',
+    location: 'Edificio A, Planta Baja',
+    summary: 'Revisión general de seguridad de red',
+    findings: 'Se detectaron dos puertos abiertos sin protección firewall.' // <--- Añadir valor
   },
   {
-    id: "inspection-002",
-    location: "Laboratorio de Electrónica",
-    date: "2026-08-27",
-    inspector: "Técnico B",
-    status: "attention",
-    statusLabel: "Requiere atención",
-    findings: 2,
-    summary: "Se registraron dos observaciones sintéticas para seguimiento de mantenimiento."
+    id: 'INS-002',
+    laboratory: 'Laboratorio de Sistemas Embebidos e IoT',
+    status: 'Completada',
+    statusLabel: 'Completada',
+    date: '2026-09-18',
+    inspector: 'Janeth',
+    notes: 'Sensores ESP32 verificados y funcionando correctamente.',
+    location: 'Edificio B, Primer Piso',
+    summary: 'Verificación de nodos IoT',
+    findings: 'Todos los sensores responden correctamente a la red central.' // <--- Añadir valor
   },
   {
-    id: "inspection-003",
-    location: "Laboratorio de Software",
-    date: "2026-08-26",
-    inspector: "Técnica C",
-    status: "ok",
-    statusLabel: "Sin incidencias",
-    findings: 0,
-    summary: "Comprobación de equipo, señalización y disponibilidad del espacio."
+    id: 'INS-003',
+    laboratory: 'Laboratorio de Desarrollo de Software',
+    status: 'En revisión',
+    statusLabel: 'En revisión',
+    date: '2026-09-19',
+    inspector: 'Ulises',
+    notes: 'Actualización de contenedores Docker en nodos del swarm.',
+    location: 'Edificio C, Segundo Piso',
+    summary: 'Mantenimiento de clúster Docker Swarm',
+    findings: 'Se requiere reiniciar un nodo esclavo por latencia en el routing mesh.' // <--- Añadir valor
   }
 ];
-
