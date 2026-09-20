@@ -64,4 +64,14 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Limitación:** Las pruebas se ejecutaron en el entorno local (`localhost:3000`), por lo que no simulan la latencia de una red móvil real ni restricciones de almacenamiento en dispositivos físicos específicos.
 * **Uso de IA:** Usé Gemini como guía técnica para identificar los errores de tipado en TypeScript, estructurar correctamente los datos de inspecciones y robustecer el código del ciclo de vida del Service Worker mediante manejo seguro de promesas.
 
+## Integrante 2: Janeth Cabrera Arguelles
+* **Contribución:** Redacción de la estrategia de caché y políticas de consistencia offline (`docs/cache-strategy.md`), actualización del `README.md` de la raíz con las instrucciones de setup/ejecución (`npm run dev`) y verificación para la Semana 03, y mantenimiento de los contratos de prueba pública.
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/b470aa54f9771e4e330b402bd402e101aa9bf930
+* **Decisión explicada:** Se estructuró la estrategia de almacenamiento definiendo una política *Network First* para la navegación de páginas y *Cache First* / *Stale-While-Revalidate* para los recursos estáticos del App Shell. Esta decisión permite visualizar la versión más reciente del sistema cuando hay conectividad disponible, garantizando al mismo tiempo una respuesta fluida mediante respuestas de respaldo cuando el dispositivo se queda sin red.
+* **Comando/Prueba ejecutada:** `npm ci`, `npm run dev`, `npm run build` y `bash public-tests/check.sh`
+* **Resultado real:** pass. El proyecto realiza la instalación de dependencias de forma inmutable, compila estáticamente sin errores (`✓ Compiled successfully`) y el script de verificación valida la existencia de los artefactos obligatorios de la Semana 03 (AC-02).
+* **Qué comprueba y qué no:** Comprueba que la documentación de arquitectura existe y concuerda con la implementación, que las instrucciones de ejecución y build son reproducibles y que el proyecto compila. No comprueba automáticamente el tiempo exacto de expiración del caché en disco ni la sincronización de fondo cuando se recupera la red.
+* **Limitación:** Al ejecutar la prueba pública local en entornos Windows mediante Git Bash, el script reporta un aviso por el parámetro `pipefail` en la opción `set`, aunque en la canalización automatizada de GitHub Actions (Linux) ejecuta de forma nativa sin errores.
+* **Uso de IA:** Usé Gemini como asistencia para estructurar la documentación de estrategias de caché siguiendo los patrones estándar de PWA y para la redacción de la evidencia técnica. Realicé la validación humana comprobando directamente la compilación local, revisando la nomenclatura de los archivos y verificando las instrucciones de desarrollo.
+
 > No necesitan inventar un error ni escribir pruebas nuevas. «Ejecuté npm test» es insuficiente como explicación: indiquen qué observa la prueba y qué comportamiento queda fuera.
