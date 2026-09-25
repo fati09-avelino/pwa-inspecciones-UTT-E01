@@ -41,7 +41,7 @@ self.addEventListener('activate', (event) => {
 
 // 3. Intercepción de peticiones (Estrategia Cache First con fallback a red)
 self.addEventListener('fetch', (event) => {
-  // Ignorar peticiones que no sean GET (como extensiones de Chrome, API POST, etc.)
+  // Ignorar peticiones que no sean GET
   if (event.request.method !== 'GET') return;
 
   event.respondWith(

@@ -84,4 +84,16 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Limitación:** Las pruebas usan un entorno simulado en Node (`node:vm`), no un Service Worker real dentro de un navegador; una prueba end-to-end con Playwright daría mayor confianza pero no se implementó esta semana. Además, al ejecutarlas en Windows aparece un aviso (`MODULE_TYPELESS_PACKAGE_JSON`) por no declarar `"type": "module"` en `package.json`; es solo una advertencia de rendimiento, no un error, y se dejó así para no afectar el comportamiento de los scripts `.mjs` existentes.
 * **Uso de IA:** Usé Claude (Anthropic) para diseñar el enfoque de simulación del Service Worker con `node:vm` y generar una primera versión de ambos archivos de prueba. Los ejecuté localmente, diagnostiqué y corregí un error real de rutas en Windows (el `import()` dinámico necesitaba una URL `file://`, no una ruta `C:\...`), y confirmé que las pruebas detectan una regresión real (verifiqué que fallan si se elimina `self.skipWaiting()` del service worker) antes de integrarlas al repositorio.
 
+## Semana 4
+
+## Integrante 1: Fatima Avelino Celis
+* **Contribución:** Implementación de las rutas de listado (`src/app/inspecciones/page.tsx`) y detalle dinámico (`src/app/inspecciones/[id]/page.tsx`) utilizando renderizado del lado del servidor (SSR), junto con el componente de estado de carga (`src/components/loading-state.tsx`) para la PWA de inspecciones de laboratorios de la UTT.
+* **Enlace a aportación:** 
+* **Decisión explicada:** Se implementó Server-Side Rendering (SSR) para las vistas de listado y detalle con datos sintéticos, asegurando que la información clave de los laboratorios y sus hallazgos se pre-rendericen en el servidor para optimizar la experiencia de usuario y la disponibilidad ante conectividad intermitente.
+* **Comando/Prueba ejecutada:** `npm run build`, `npm run dev` y validación visual interactiva en el navegador local (`http://localhost:3000/inspecciones` y `http://localhost:3000/inspecciones/INS-003`).
+* **Resultado real:** pass. El comando `npm run build` completó exitosamente sin errores de tipado en TypeScript (`Compiled successfully`), generando correctamente las rutas dinámicas y estáticas requeridas.
+* **Qué comprueba y qué no:** Comprueba que la estructura de rutas en Next.js App Router procesa adecuadamente los datos sintéticos, renderiza los estados visuales y compila sin errores para producción. No comprueba la sincronización con bases de datos remotas ni APIs externas en tiempo real.
+* **Limitación:** Las pruebas se ejecutaron exclusivamente en el entorno local (`localhost:3000`), por lo que no simulan latencias reales de red móvil ni restricciones de hardware en dispositivos físicos.
+* **Uso de IA:** Usé Gemini como apoyo técnico para estructurar las rutas dinámicas en Next.js, validar el tipado de los datos sintéticos y redactar la documentación técnica de la actividad.
+
 > No necesitan inventar un error ni escribir pruebas nuevas. «Ejecuté npm test» es insuficiente como explicación: indiquen qué observa la prueba y qué comportamiento queda fuera.
