@@ -88,7 +88,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 
 ## Integrante 1: Fatima Avelino Celis
 * **Contribución:** Implementación de las rutas de listado (`src/app/inspecciones/page.tsx`) y detalle dinámico (`src/app/inspecciones/[id]/page.tsx`) utilizando renderizado del lado del servidor (SSR), junto con el componente de estado de carga (`src/components/loading-state.tsx`) para la PWA de inspecciones de laboratorios de la UTT.
-* **Enlace a aportación:** 
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/d4ab5319257db4669c377c690a6c3a50df673521
 * **Decisión explicada:** Se implementó Server-Side Rendering (SSR) para las vistas de listado y detalle con datos sintéticos, asegurando que la información clave de los laboratorios y sus hallazgos se pre-rendericen en el servidor para optimizar la experiencia de usuario y la disponibilidad ante conectividad intermitente.
 * **Comando/Prueba ejecutada:** `npm run build`, `npm run dev` y validación visual interactiva en el navegador local (`http://localhost:3000/inspecciones` y `http://localhost:3000/inspecciones/INS-003`).
 * **Resultado real:** pass. El comando `npm run build` completó exitosamente sin errores de tipado en TypeScript (`Compiled successfully`), generando correctamente las rutas dinámicas y estáticas requeridas.
