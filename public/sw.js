@@ -41,7 +41,8 @@ self.addEventListener('activate', (event) => {
 
 // 3. Intercepción de peticiones (Estrategia Cache First con fallback a red)
 self.addEventListener('fetch', (event) => {
-  // Ignorar peticiones que no sean GET (como extensiones de Chrome, API POST, etc.)
+  // Ignorar peticiones que no sean HTTP/HTTPS (como extensiones del navegador)
+  if (!event.request.url.startsWith('http')) return;
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
@@ -56,11 +57,18 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // Fallback offline genérico si falla la red y es una navegación HTML
+          // Fallback offline genérico si es una navegación HTML
           if (event.request.mode === 'navigate') {
             return caches.match('/');
           }
+          // ¡Importante! Retornar una respuesta vacía o de error controlada 
+          // para evitar que devuelva undefined y cause el error en consola.
+          return new Response('Recurso no disponible offline', {
+            status: 404,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+          });
         });
     })
   );
 });
+
