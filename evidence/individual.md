@@ -96,4 +96,14 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Limitación:** Las pruebas se ejecutaron exclusivamente en el entorno local (`localhost:3000`), por lo que no simulan latencias reales de red móvil ni restricciones de hardware en dispositivos físicos.
 * **Uso de IA:** Usé Gemini como apoyo técnico para estructurar las rutas dinámicas en Next.js, validar el tipado de los datos sintéticos y redactar la documentación técnica de la actividad.
 
+## Integrante 2: Janeth Cabrera Arguelles
+* **Contribución:** Redacción del informe de decisiones de renderizado (`docs/rendering-decision.md`), actualización de la guía del proyecto (`README.md`) alineada a la arquitectura de Server Components de las rutas de inspección, y verificación de los contratos de pruebas automatizadas y soporte sin conexión.
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/62db89869232d073e74b985eb6170c234f11a6bc
+* **Decisión explicada:** Se justificó la adopción de Server-Side Rendering (SSR) mediante Server Components en Next.js para las rutas `/inspecciones` y `/inspecciones/[id]`, destacando que la generación del HTML en el servidor acelera el First Contentful Paint (FCP) y reduce el consumo de CPU en el cliente, complementándose con las políticas de fallback del Service Worker para garantizar la continuidad del usuario en entornos offline.
+* **Comando/Prueba ejecutada:** `npm ci`, `npm run build`, `npm run test` y `bash public-tests/check.sh`
+* **Resultado real:** pass. El proyecto instala dependencias de forma inmutable, pasa la suite de pruebas automatizadas offline (`tests/offline.spec.ts`), compila limpiamente para producción (`✓ Compiled successfully`) y el script valida los artefactos obligatorios.
+* **Qué comprueba y qué no:** Comprueba que la documentación de arquitectura refleja fielmente la estructura de los Server Components implementados, que las pruebas unitarias del Service Worker pasan y que el proyecto compila. No comprueba automáticamente los tiempos exactos de latencia de red bajo conexiones móviles de alta variabilidad.
+* **Limitación:** Al ejecutar la prueba pública local en entornos Windows mediante Git Bash, el script reporta un aviso por el parámetro `pipefail`, aunque en la canalización automatizada de GitHub Actions (Linux) ejecuta de manera nativa sin errores.
+* **Uso de IA:** Usé Gemini como apoyo para estructurar el análisis de trade-offs de arquitectura SSR y la redacción del reporte de ingeniería. Realicé la validación humana inspeccionando directamente los Server Components del proyecto y ejecutando las pruebas de compilación y verificación en la terminal local.
+
 > No necesitan inventar un error ni escribir pruebas nuevas. «Ejecuté npm test» es insuficiente como explicación: indiquen qué observa la prueba y qué comportamiento queda fuera.
