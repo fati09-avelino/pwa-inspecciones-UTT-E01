@@ -1,14 +1,13 @@
 import Link from 'next/link';
-import { inspections } from '@/lib/data/inspections';
-
+ import { fetchInspectionById } from '@/lib/data/inspections-service';
 interface PageProps {
   params: {
     id: string;
   };
 }
 
-export default function InspeccionDetallePage({ params }: PageProps) {
-  const inspection = inspections.find((item) => item.id === params.id);
+ export default async function InspeccionDetallePage({ params }: PageProps) {
+    const inspection = await fetchInspectionById(params.id);
 
   if (!inspection) {
     return (
