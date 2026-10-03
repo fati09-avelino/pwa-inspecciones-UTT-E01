@@ -123,7 +123,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 ## Integrante 1: Fatima Avelino Celis
 
 * **Contribución:** Implementación de los esquemas de datos offline (`src/lib/storage/schema.ts`) y la lógica de negocio para la política de resolución de conflictos y prevención de duplicados en la cola (`src/lib/sync/conflict-policy.ts`) para la PWA de inspecciones de laboratorios de la UTT.
-* **Enlace a aportación:** 
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/72eb95369d31059396c18779317c2b9dab0f6973
 * **Decisión explicada:** Se implementó una política de resolución basada en *Last-Write-Wins* comparando las marcas de tiempo en formato ISO (`updatedAt`) convertidas a milisegundos mediante `.getTime()`. Esto asegura que si la versión local es más reciente que la del servidor, prevalezca la modificación del usuario incrementando el número de versión, evitando sobreescrituras accidentales de datos. Asimismo, se utilizó el método `.some()` para validar duplicados por ID en la cola de sincronización.
 * **Comando/Prueba ejecutada:** Ejecución exitosa de pruebas unitarias personalizadas (`node --import ./tests/register-ts-loader.mjs --test tests/sync.spec.ts`) y validación de compilación de producción con Next.js (`npm run build`).
 * **Resultado real:** Las pruebas unitarias de las funciones de conflicto y duplicados pasaron al 100% (`pass 2`, `fail 0`), y el empaquetado de la aplicación completó sin errores de tipado en TypeScript.
