@@ -129,3 +129,13 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Resultado real:** Las pruebas unitarias de las funciones de conflicto y duplicados pasaron al 100% (`pass 2`, `fail 0`), y el empaquetado de la aplicación completó sin errores de tipado en TypeScript.
 * **Limitación y qué no-comprueba:** La lógica desarrollada cubre el modelado estructural, los tipos estrictos y las reglas lógicas de sincronización y control de versiones offline, pero no gestiona directamente las llamadas HTTP reales contra una base de datos en producción ni el almacenamiento físico en IndexedDB del navegador (lo cual corresponde a la integración del ciclo completo).
 * **Uso de IA:** Se utilizó Anthropic (Claude) como herramienta de apoyo para estructurar las interfaces de TypeScript, refinar la lógica algorítmica de comparación de marcas de tiempo en la política de conflictos y diseñar los casos de prueba unitarios, con validación humana mediante la ejecución local de Node.js y verificación de tipos.
+
+## Integrante 2: Janeth Cabrera Arguelles
+* **Contribución:** Implementación de la cola de reintentos y envío diferido de sincronización (`src/lib/sync/queue.ts`), junto con la redacción del documento de políticas de sincronización offline (`docs/sync-policy.md`).
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/41be510afb982915bf14eb155c2c1087d3adf274
+* **Decisión explicada:** Se implementó una cola persistente en LocalStorage con deduplicación de ítems por ID y límite configurable de 3 reintentos. Esto asegura que ante caídas temporales de red las operaciones offline se despachen ordenadamente al recuperar conectividad sin saturar el servidor con peticiones redundantes.
+* **Comando/Prueba ejecutada:** `npm ci`, `npm run build` y `npm run test`
+* **Resultado real:** pass. El módulo de la cola se integra correctamente con las estructuras de datos y políticas de conflicto, compilando limpiamente sin errores de TypeScript (`✓ Compiled successfully`) y pasando la suite de pruebas automatizadas.
+* **Qué comprueba y qué no:** Comprueba la persistencia local de la cola, la deduplicación de registros y la lógica de reintentos con fallbacks. No comprueba automáticamente tiempos de latencia bajo redes 3G/4G reales sin simulación.
+* **Limitación:** El almacenamiento en LocalStorage tiene un límite de capacidad (5MB), lo cual es suficiente para inspecciones en texto pero requeriría IndexedDB si se anexan fotografías de alta resolución en offline.
+* **Uso de IA:** Usé Gemini como apoyo para estructurar las funciones asíncronas de la cola de sincronización y el informe markdown de políticas. Validé manualmente que los tipos importados coincidieran exactamente con la interfaz `SyncQueueItem` definida por el equipo.
