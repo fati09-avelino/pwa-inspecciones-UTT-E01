@@ -5,7 +5,7 @@
    "scripts": { "dev": "next dev", 
    "build": "next build", 
    "start": "next start", 
-   "test": "node tests/starter.spec.mjs && node tests/manifest.spec.mjs && node --import ./tests/register-ts-loader.mjs --test tests/service-worker.spec.ts && node --import ./tests/register-ts-loader.mjs --test tests/offline.spec.ts && node --import ./tests/register-ts-loader.mjs --test tests/rendering.spec.ts", 
+   "test": "node tests/starter.spec.mjs && node tests/manifest.spec.mjs && node --import ./tests/register-ts-loader.mjs --test tests/service-worker.spec.ts && node --import ./tests/register-ts-loader.mjs --test tests/offline.spec.ts && node --import ./tests/register-ts-loader.mjs --test tests/rendering.spec.ts  && node --import ./tests/register-ts-loader.mjs --test tests/capabilities.spec.ts", 
    "verify": "node scripts/verify.mjs" 
   },
   "dependencies": {
