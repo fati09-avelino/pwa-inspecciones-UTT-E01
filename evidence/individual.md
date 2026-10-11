@@ -139,3 +139,15 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Qué comprueba y qué no:** Comprueba la persistencia local de la cola, la deduplicación de registros y la lógica de reintentos con fallbacks. No comprueba automáticamente tiempos de latencia bajo redes 3G/4G reales sin simulación.
 * **Limitación:** El almacenamiento en LocalStorage tiene un límite de capacidad (5MB), lo cual es suficiente para inspecciones en texto pero requeriría IndexedDB si se anexan fotografías de alta resolución en offline.
 * **Uso de IA:** Usé Gemini como apoyo para estructurar las funciones asíncronas de la cola de sincronización y el informe markdown de políticas. Validé manualmente que los tipos importados coincidieran exactamente con la interfaz `SyncQueueItem` definida por el equipo.
+
+## Semana 6
+
+## Integrante 1: Fátima Avelino Celis
+
+* **Contribución:** Implementación de módulos de hardware con permisos mínimos y fallbacks (`src/lib/device/camera.ts` y `src/lib/device/geolocation.ts`) para la PWA de inspecciones.
+* **Enlace a aportación:** 
+* **Decisión técnica explicada:** Para la cámara, se solicitó acceso usando `navigator.mediaDevices.getUserMedia` deteniendo el *stream* inmediatamente para evitar el consumo de recursos en segundo plano, e implementando un `<input type="file" capture="environment">` como plan de contingencia (fallback). Para la geolocalización, se configuró `enableHighAccuracy: false` para ahorrar batería y se manejó el error retornando `null` silenciosamente en lugar de arrojar una excepción si el usuario deniega el permiso.
+* **Comando/Prueba ejecutada:** Validación estricta de tipos y empaquetado de producción ejecutando `npm run build`.
+* **Resultado real:** El proyecto compiló exitosamente, garantizando que el tipado de las APIs nativas del navegador (`Geolocation` y `MediaDevices`) es correcto.
+* **Limitación y qué no-comprueba:** El código asume un entorno seguro (HTTPS o localhost). Las pruebas locales no validan el comportamiento físico en dispositivos móviles reales ni las políticas de bloqueo estrictas que algunos navegadores aplican a estas APIs.
+* **Uso de IA:** Se utilizó IA como herramienta de apoyo para estructurar el manejo de promesas asíncronas de las APIs nativas, definir los parámetros óptimos para el ahorro de batería en geolocalización y redactar la evidencia técnica.
