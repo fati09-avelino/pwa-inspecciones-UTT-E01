@@ -151,3 +151,13 @@ c52bede963c39512da610b272a1c0a1acae830d5
 * **Resultado real:** El proyecto compiló exitosamente, garantizando que el tipado de las APIs nativas del navegador (`Geolocation` y `MediaDevices`) es correcto.
 * **Limitación y qué no-comprueba:** El código asume un entorno seguro (HTTPS o localhost). Las pruebas locales no validan el comportamiento físico en dispositivos móviles reales ni las políticas de bloqueo estrictas que algunos navegadores aplican a estas APIs.
 * **Uso de IA:** Se utilizó IA como herramienta de apoyo para estructurar el manejo de promesas asíncronas de las APIs nativas, definir los parámetros óptimos para el ahorro de batería en geolocalización y redactar la evidencia técnica.
+
+## Integrante 2: Janeth Cabrera Arguelles
+* **Contribución:** Implementación del cliente de notificaciones con permisos mínimos y fallback (`src/lib/notifications/client.ts`), junto con la redacción del documento técnico de capacidades de hardware y avisos (`docs/capabilities.md`).
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/7eeb74d6c2163cc6f6613283500524ca8208ffc8
+* **Decisión explicada:** Se implementó una arquitectura de notificaciones con degradación progresiva que consulta la disponibilidad del Service Worker antes de degradar a la Web Notification API o a un fallback por consola. Esto garantiza que la aplicación emita avisos cuando existan permisos sin interrumpir el flujo del usuario cuando los permisos sean denegados.
+* **Comando/Prueba ejecutada:** `npm ci`, `npm run build` y `npm run test`
+* **Resultado real:** pass. El proyecto instala dependencias de manera inmutable, compila sin errores de TypeScript (`✓ Compiled successfully`) y satisface las validaciones del cliente de capacidades.
+* **Qué comprueba y qué no:** Comprueba la correcta importación de tipos, la resiliencia en entornos donde el objeto `Notification` no está definido (como SSR) y la ejecución de fallbacks. No comprueba automáticamente la apariencia estética de las notificaciones emergentes en dispositivos móviles físicos.
+* **Limitación:** Las notificaciones push desde un servidor remoto requieren una infraestructura VAPID activa; por ello, en esta fase se implementaron notificaciones locales ejecutadas desde el cliente y el Service Worker.
+* **Uso de IA:** Usé Gemini como apoyo para la estructuración de la API de notificaciones y la redacción de la matriz de degradación técnica. Realicé la validación humana probando las llamadas en entorno web local y verificando la compilación en la terminal.
