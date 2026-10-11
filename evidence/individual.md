@@ -145,7 +145,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 ## Integrante 1: Fátima Avelino Celis
 
 * **Contribución:** Implementación de módulos de hardware con permisos mínimos y fallbacks (`src/lib/device/camera.ts` y `src/lib/device/geolocation.ts`) para la PWA de inspecciones.
-* **Enlace a aportación:** 
+* **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/a8a322de59a41bd6eeab04855852f66beddcf94c
 * **Decisión técnica explicada:** Para la cámara, se solicitó acceso usando `navigator.mediaDevices.getUserMedia` deteniendo el *stream* inmediatamente para evitar el consumo de recursos en segundo plano, e implementando un `<input type="file" capture="environment">` como plan de contingencia (fallback). Para la geolocalización, se configuró `enableHighAccuracy: false` para ahorrar batería y se manejó el error retornando `null` silenciosamente en lugar de arrojar una excepción si el usuario deniega el permiso.
 * **Comando/Prueba ejecutada:** Validación estricta de tipos y empaquetado de producción ejecutando `npm run build`.
 * **Resultado real:** El proyecto compiló exitosamente, garantizando que el tipado de las APIs nativas del navegador (`Geolocation` y `MediaDevices`) es correcto.
