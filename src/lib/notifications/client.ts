@@ -34,9 +34,26 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
 }
 
 /**
+ * Tiempo máximo de espera para que el Service Worker esté listo.
+ */const SW_READY_TIMEOUT_MS = 2000;
+
+// Espera al Service Worker, pero sin quedarse colgado si no hay ninguno activo.
+async function getActiveRegistration(): Promise<ServiceWorkerRegistration | null> {
+  if (!('serviceWorker' in navigator)) return null;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const timeout = new Promise<null>((resolve) => {
+      timer = setTimeout(() => resolve(null), SW_READY_TIMEOUT_MS);
+    });
+    return await Promise.race([navigator.serviceWorker.ready, timeout]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+/**
  * Muestra una notificación local al usuario.
- * Si las notificaciones nativas no están permitidas o no son soportadas,
- * ejecuta un fallback por consola/interfaz sin interrumpir la aplicación.
+ * Nunca pide permiso por su cuenta. Devuelve true si se mostró.
  */
 export async function sendLocalNotification(payload: NotificationPayload): Promise<boolean> {
   if (!isNotificationSupported()) {
@@ -46,32 +63,27 @@ export async function sendLocalNotification(payload: NotificationPayload): Promi
 
   if (Notification.permission === 'granted') {
     try {
-      // Intentar mostrar la notificación a través del Service Worker si está activo
-      if ('serviceWorker' in navigator) {
-        const registration = await navigator.serviceWorker.ready;
-        if (registration && 'showNotification' in registration) {
-          await registration.showNotification(payload.title, {
-            body: payload.body,
-            icon: payload.icon || '/icons/icon-192x192.png',
-            data: payload.data,
-          });
-          return true;
-        }
-      }
-
-      // Fallback a la API de Notification estándar en el hilo principal
-      new Notification(payload.title, {
+      const options = {
         body: payload.body,
         icon: payload.icon || '/icons/icon-192x192.png',
         data: payload.data,
-      });
+      };
+
+      const registration = await getActiveRegistration();
+      if (registration && 'showNotification' in registration) {
+        await registration.showNotification(payload.title, options);
+        return true;
+      }
+
+      // Sin Service Worker activo: API Notification en el hilo principal
+      new Notification(payload.title, options);
       return true;
     } catch (error) {
       console.warn('Fallo al emitir la notificación nativa:', error);
     }
   }
 
-  // Fallback silencioso cuando el permiso no está concedido
+  // Fallback cuando el permiso no está concedido
   console.info('[NOTIFICACIÓN RETENIDA POR PERMISOS]:', payload.title, '-', payload.body);
   return false;
 }
