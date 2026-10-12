@@ -64,4 +64,13 @@ Ejecuta las pruebas y el build, y genera `reports/verification.json`. Un resulta
 
 ## Flujo de trabajo
 
-El trabajo se hace en ramas (`feature/...`, `fix/...`, `tests/...`, `docs/...`) sobre `develop`, y se integra a `main` mediante Pull Request; no se sube directo a `main` ni a `develop`.
+El trabajo se hace en ramas (`feature/...` o `fix/...`) y se integra a `main` mediante Pull Request; no se sube directo a `main`.
+
+## Arquitectura de la Semana 06: Capacidades del Dispositivo y Notificaciones
+
+En esta iteración se agregan capacidades opcionales del dispositivo, siempre con permisos mínimos y un fallback cuando no están disponibles:
+- **Cámara (`src/lib/device/camera.ts`):** `requestCameraPermission` comprueba el permiso pidiendo solo video y apaga las pistas de inmediato. `getFallbackFileInput` ofrece un campo de archivo (solo imágenes) cuando no hay cámara o se deniega el permiso.
+- **Geolocalización (`src/lib/device/geolocation.ts`):** `getCurrentLocation` devuelve únicamente latitud, longitud y precisión, con baja precisión y una espera máxima de 10 segundos. Si no hay soporte o se deniega el permiso, devuelve `null`.
+- **Notificaciones (`src/lib/notifications/client.ts`):** `requestNotificationPermission` y `sendLocalNotification`. Muestran el aviso con el Service Worker si está activo, o con `Notification` en caso contrario. Sin soporte o sin permiso, dejan un aviso en consola y devuelven `false`.
+- **Documentación (`docs/capabilities.md`):** decisiones, permisos y límites de cada capacidad.
+- **Pruebas Automatizadas (`tests/capabilities.spec.ts`):** 26 pruebas de comportamiento. Verifican que importar los módulos no pide permisos, que se piden solo los mínimos, que no se recolectan más datos de los necesarios y que cada fallback funciona sin lanzar errores y capacidades del dispositivo (capabilities.spec.ts).

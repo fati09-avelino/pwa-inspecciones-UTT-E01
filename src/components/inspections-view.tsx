@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Inspection } from '@/lib/data/inspections';
 import LoadingState from '@/components/loading-state';
+import DeviceActions from './device-actions';
 
 export type StatusFilter = 'todas' | Inspection['status'];
 
@@ -22,14 +23,16 @@ type InspectionsViewProps = {
   onRetry?: () => void;
 };
 
-// Vista del listado: función pura de sus props (sin hooks), por lo que se
-// puede renderizar y probar en cada estado (carga, error, vacío, con datos).
 export default function InspectionsView({ state, filter, onFilterChange, onRetry }: InspectionsViewProps) {
   const visible = state.kind === 'ready' ? filterInspections(state.items, filter) : [];
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Listado de Inspecciones (CSR)</h1>
+
+      <div className="mb-6">
+        <DeviceActions />
+      </div>
 
       <div role="group" aria-label="Filtrar por estado" className="flex flex-wrap gap-2 mb-6">
         {STATUS_FILTERS.map((option) => (
