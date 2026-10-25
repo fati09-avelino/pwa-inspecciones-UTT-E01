@@ -1,0 +1,53 @@
+tests/semana-8-defecto-controlado
+
+> pwa-inspecciones-laboratorio@0.1.0 test:integration
+> playwright test --config playwright.integration.config.mjs --grep respuesta perdida
+
+
+Running 1 test using 1 worker
+
+(node:25504) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25504) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\integration\sync.spec.mjs:17:1 › respuesta perdida: reintentar la misma operación no duplica el registro remoto (2.7s)
+
+
+  1) tests\integration\sync.spec.mjs:17:1 › respuesta perdida: reintentar la misma operación no duplica el registro remoto 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoHaveLength[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected length: [32m1[39m
+    Received length: [31m2[39m
+    Received array:  [31m[{"findings": "Hallazgo sintético sin datos personales", "id": "SYNTH-INTEGRATION-008", "location": "Laboratorio simulado A", "status": "Pendiente", "statusLabel": "Pendiente", "summary": "Prueba de almacenamiento y red", "title": "Inspección sintética", "updatedAt": "2026-10-25T12:00:00.000Z", "version": 1}, {"findings": "Hallazgo sintético sin datos personales", "id": "SYNTH-INTEGRATION-008", "location": "Laboratorio simulado A", "status": "Pendiente", "statusLabel": "Pendiente", "summary": "Prueba de almacenamiento y red", "title": "Inspección sintética", "updatedAt": "2026-10-25T12:00:00.000Z", "version": 1}][39m
+
+      24 |   sync.setMode('success');
+      25 |   expect(await sync.process()).toEqual({ processed: 1, failed: 0 });
+    > 26 |   expect(sync.records).toHaveLength(1);
+         |                        ^
+      27 |   expect(sync.requests).toHaveLength(2);
+      28 |   expect(sync.requests.map(item => item.key)).toEqual([operation.id, operation.id]);
+      29 |   expect(sync.records).toEqual([inspection]);
+        at C:\Users\100199601\Documents\Codex\2026-10-25\quiero-que-revises-la-tarea-en-10\work\pwa\tests\integration\sync.spec.mjs:26:24
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\integration\sync-respuesta-perdida-rei-4dcd7--duplica-el-registro-remoto\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\integration\sync-respuesta-perdida-rei-4dcd7--duplica-el-registro-remoto\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests\integration\sync.spec.mjs:17:1 › respuesta perdida: reintentar la misma operación no duplica el registro remoto 
+
+To open last HTML report run:
+[36m[39m
+[36m  npx playwright show-report reports\integration\html[39m
+[36m[39m
+npm notice
+npm notice New major version of npm available! 10.9.4 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+Exit code: 1

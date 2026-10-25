@@ -184,3 +184,40 @@ c52bede963c39512da610b272a1c0a1acae830d5
 - **Qué demuestra y qué no demuestra:** Demuestra que la lógica pura rechaza correctamente inspecciones con datos vacíos y que el algoritmo de la cola evita duplicados en memoria. No demuestra que los datos se guarden físicamente en IndexedDB ni la interacción de la red (eso corresponde a las pruebas de integración).
 - **Limitación o riesgo:** Al ser pruebas puramente unitarias y síncronas usando mocks, existe el riesgo de que el manejo asíncrono real en el navegador (IndexedDB) presente fallos no detectables en esta capa.
 - **IA: herramienta, propósito, partes influidas y validación propia:** Herramienta: Gemini. Propósito: Estructurar los casos de prueba con la sintaxis específica del test runner nativo de Node y planear el escenario del defecto controlado. Partes influidas: estructura sintáctica de `logic.spec.ts`. Validación propia: Ejecuté los comandos en mi terminal local, comprobé que las aserciones fallaran de manera genuina al inyectar el error y tomé capturas de los resultados reales de mi entorno.
+
+## Nombre: Hector Ulises Cacho Gonzalez · Semana 8
+
+- **Grupo y equipo:** 10 A, Equipo 1.
+- **Contribución:** pruebas de integración en `tests/integration/sync.spec.mjs`,
+  fixtures en `tests/fixtures/`, configuración Playwright, cobertura y runner Node,
+  workflow `.github/workflows/academic-evaluation.yml`, README y diagnóstico
+  `docs/semana-08-review.md`. Rama: `tests/semana-8-integracion-ci`.
+- **Enlace de aportación:** [comparación con develop](https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/compare/develop...tests/semana-8-integracion-ci).
+  El SHA exacto se obtiene con `git rev-parse HEAD` y se registra en Classroom y
+  en el reporte de Actions, sin un commit adicional para insertar su propio SHA.
+- **Decisión técnica y motivo:** ejecutar la cola real en Chromium con LocalStorage
+  real y un remoto controlado. La deduplicación del fixture depende de una clave
+  de operación estable, no del ID de inspección; así un defecto del cliente produce
+  dos registros y la prueba lo detecta. Se añadió `Idempotency-Key: item.id` al envío.
+- **Pruebas y resultados observados por Codex:** seis pruebas de integración pasan;
+  79 comprobaciones Node pasan con cobertura; lint y tipos de la aplicación pasan.
+  Se conservan resultados reproducibles en `evidence/semana08/` y reportes generados
+  en `reports/` y `coverage/`. Consultar `reports/verification.json` para el estado
+  completo de build/E2E y no inferir éxito global de una suite parcial.
+- **Defecto controlado:** Codex retiró temporalmente la clave en la rama
+  `tests/semana-8-defecto-controlado`; la prueba de respuesta perdida observó dos
+  registros en lugar de uno y salió con código 1. Restaurada la solución, pasan seis.
+  Salidas: [fallo](semana08/controlled-failure.txt) y
+  [recuperación](semana08/controlled-recovery.txt). No se integra el defecto.
+- **Qué demuestra y qué no:** demuestra persistencia de la cola al recargar un
+  documento de prueba, comportamiento HTTP, recuperación de 503 y reintento de la misma
+  operación sin duplicado con un remoto que respeta el contrato. No demuestra creación
+  desde la interfaz, recarga offline del shell real ni idempotencia de un backend desplegado.
+- **Limitación:** la cola original descarta tras tres fallos; no cubre concurrencia
+  entre pestañas ni edición después de una respuesta perdida. Falta conectar la
+  interfaz y el endpoint real. Los E2E y la estrategia final siguen pendientes del equipo.
+- **Uso declarado de IA:** Codex (OpenAI) revisó instrucciones y código, diseñó y
+  escribió estas pruebas/configuración/documentación, corrigió el header y ejecutó
+  las comprobaciones y el defecto controlado. La validación humana de Ulises está
+  pendiente: debe revisar el diff, comprender las aserciones, repetir los comandos
+  y registrar el resultado real antes de afirmar ejecución o aprobación propia.
