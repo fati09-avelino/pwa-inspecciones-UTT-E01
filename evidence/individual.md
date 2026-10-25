@@ -177,7 +177,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 ## Nombre: Fatima Avelino Celis
 
 - **Contribución:**  Implementación de pruebas unitarias para validación de datos e idempotencia en la cola. Archivo modificado: `tests/unit/logic.spec.ts`.
-**Enlace a aportación:**
+**Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/2a7564084767a5c85cc7805578ddca39cb6a70ef
 - **Decisión técnica y motivo:** Se utilizó el test runner nativo de Node.js (`node:test` y `node:assert/strict`) con funciones puras aisladas (mocks). Esto permite que las pruebas de lógica se ejecuten de manera extremadamente rápida desde la terminal, sin depender del navegador ni instalar frameworks pesados de terceros (como Jest).
 - **Prueba/comando que ejecuté:** `node --import ./tests/register-ts-loader.mjs --test tests/unit/logic.spec.ts`. También inyecté un defecto intencional comentando la validación en `addToSyncQueue` para forzar un fallo.
 - **Resultado observado y enlace al reporte:** Las 4 pruebas pasaron exitosamente (Pass). Al inyectar el defecto controlado, la prueba falló con un `AssertionError (2 !== 1)` como se esperaba, demostrando que la aserción atrapa la regresión. Evidencia en `evidence/defecto-cola.png` y `evidence/recuperacion-cola.png`.
