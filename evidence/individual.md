@@ -176,7 +176,6 @@ c52bede963c39512da610b272a1c0a1acae830d5
 
 ## Nombre: Fatima Avelino Celis
 
-<<<<<<< HEAD
 - **Contribución:** Implementación de pruebas unitarias para validación de datos e idempotencia en la cola. Archivos modificados y evaluados: `tests/unit/logic.spec.ts`, `src/lib/data/inspections.ts` y `src/lib/sync/queue.ts`.
 - **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/a18ff92bbde97326124bf09b6f9b0add8f4c3429
 - **Decisión técnica y motivo:** Se utilizó el test runner nativo de Node.js (`node:test` y `node:assert/strict`). Se refactorizó el código de pruebas para importar y evaluar las funciones reales del proyecto en lugar de usar simulaciones locales (mocks), inyectando un objeto `localStorage` simulado en memoria para permitir que la lógica de la cola funcione en la terminal de Node.
@@ -222,4 +221,14 @@ c52bede963c39512da610b272a1c0a1acae830d5
   las comprobaciones y el defecto controlado. La validación humana de Ulises está
   pendiente: debe revisar el diff, comprender las aserciones, repetir los comandos
   y registrar el resultado real antes de afirmar ejecución o aprobación propia.
->>>>>>> origin/tests/semana-8-integracion-ci
+
+## Nombre: Janeth Cabrera Arguelles · Semana 8
+
+- **Contribución:** Prueba E2E con Playwright de permisos denegados (`tests/e2e/capacidades-denegadas.spec.ts`, 3 casos) y estrategia de pruebas (`docs/test-strategy.md`: riesgos, justificación de capas, diagnóstico inicial, evidencia de fallo y recuperación, límites). Rama: `feature/e2e-test-strategy`.
+- **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/a88af8973ea74f9f0c33dd31793805b718938503
+- **Decisión técnica y motivo:** Para simular que la persona niega los permisos, sustituyo `navigator.mediaDevices.getUserMedia` y `navigator.geolocation` con `page.addInitScript` antes de cargar la página. Así se prueba la interfaz real contra un rechazo determinista, sin depender de los permisos del sistema ni de un diálogo del navegador. La imagen se adjunta con `setInputFiles` usando un PNG sintético de 1x1 píxel, sin datos reales. También compruebo que no aparece ningún `alert()`.
+- **Prueba/comando que ejecuté:** `npm run build`, `npm run test:e2e` y `npm run verify`.
+- **Resultado observado y enlace al reporte:** `test:e2e`: 3 pruebas en verde. `npm run verify`: "Verificación técnica: pass" (lint, tipos, build, 79 pruebas Node con cobertura, 6 de integración y 3 E2E). Reporte local en `reports/verification.json`; el resultado de GitHub Actions del commit evaluado se entrega en Classroom.
+- **Qué demuestra y qué no demuestra:** Demuestra que, con cámara y ubicación denegadas, la pantalla `/inspecciones` muestra el aviso de cada una, permite adjuntar la imagen desde el selector de archivos y sigue utilizable. No demuestra el flujo crear, guardar offline, recargar, reconectar y sincronizar sin duplicar (E2E 1): aún no existe un formulario conectado a la cola, así que no está implementado. Tampoco usa permisos reales del sistema operativo, ni prueba el guardado de la captura, ni corre en un móvil físico.
+- **Limitación o riesgo:** Las APIs se sustituyen en el navegador, por lo que un cambio en cómo la app llama a esas APIs puede romper la prueba sin que el comportamiento real cambie. Solo se prueba Chromium. Las pruebas dependen de los textos de los mensajes en pantalla.
+- **IA: herramienta, propósito, partes influidas y validación propia:** Herramienta: Claude (Anthropic). Propósito: ayudarme a escribir la primera versión de `capacidades-denegadas.spec.ts` y de `docs/test-strategy.md`. Validación propia: ejecuté `npm run build`, `npm run test:e2e` y `npm run verify` en mi máquina, comprobé que las 3 pruebas pasan y revisé el contenido de los dos archivos antes de subirlos.
