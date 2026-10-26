@@ -12,3 +12,5 @@ reports/
 test-results/
 playwright-report/
 *.tsbuildinfo
+
+.pwa-data/

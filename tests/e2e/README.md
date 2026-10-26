@@ -1,13 +1,9 @@
-# E2E de semana 8 · pendiente de integrar por Janeth
+# E2E de semana 8
 
-Usar Playwright (@playwright/test) con archivos *.spec.ts, *.spec.js o *.spec.mjs.
-npm run test:e2e arranca npm run start -- --hostname 127.0.0.1 --port 3008.
-Ejecutar npm run build antes. El servidor se detiene al terminar.
-Cada caso recibe un contexto nuevo.
+- capacidades-denegadas.spec.ts: tres casos originales de Janeth sobre fallbacks.
+- flujo-offline.spec.ts: flujo completo offline con recarga real y captura guardada con capacidades denegadas.
+- api-idempotencia.spec.ts: reenvío y conflicto en el endpoint real.
 
-Escenarios desde la interfaz:
-1. Crear → guardar offline → recargar offline → reconectar → sincronizar una sola vez.
-2. Denegar cámara o ubicación y completar la captura con el fallback visible.
-
-Integración llama a módulos directamente y NO sustituye los E2E.
-Aún faltan tests ejecutables; el comando y el workflow deben fallar hasta integrarlos.
+Ejecutar npm run build y npm run test:e2e, o npm run verify para todas las etapas.
+Playwright inicia el servidor de producción en 127.0.0.1:3008 y usa .pwa-data/e2e-<PID>.json.
+Cada contexto tiene almacenamiento aislado y cada registro tiene un ID sintético único.

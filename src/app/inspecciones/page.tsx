@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import InspectionCapture from '@/components/inspection-capture';
 import InspectionsView, { type StatusFilter, type ViewState } from '@/components/inspections-view';
 import { fetchInspections } from '@/lib/data/inspections-service';
 
@@ -32,11 +33,14 @@ export default function InspeccionesPage() {
   }, [attempt]);
 
   return (
+    <>
+    <InspectionCapture />
     <InspectionsView
       state={state}
       filter={filter}
       onFilterChange={setFilter}
       onRetry={() => setAttempt((n) => n + 1)}
     />
+    </>
   );
 }

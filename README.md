@@ -64,7 +64,7 @@ Ejecuta lint, tipos, build, pruebas con cobertura, integración y E2E, y genera 
 
 ## Flujo de trabajo
 
-El trabajo se hace en ramas (`feature/...` o `fix/...`) y se integra a `main` mediante Pull Request; no se sube directo a `main`.
+El trabajo se hace en ramas propias y se integra por Pull Request a `develop`. Esta ampliación no modifica `main`.
 
 ## Arquitectura de la Semana 06: Capacidades del Dispositivo y Notificaciones
 
@@ -77,7 +77,7 @@ En esta iteración se agregan capacidades opcionales del dispositivo, siempre co
 
 ## Semana 08: integración y CI (Ulises)
 
-La aportación está en `tests/semana-8-integracion-ci`, basada en `develop`. Diagnóstico y coordinación en [docs/semana-08-review.md](docs/semana-08-review.md). La estrategia final del equipo corresponde a `docs/test-strategy.md` (pendiente de Janeth).
+La aportación está en `tests/semana-8-integracion-ci`, basada en `develop`. Diagnóstico y coordinación en [docs/semana-08-review.md](docs/semana-08-review.md). La estrategia final del equipo corresponde a [docs/test-strategy.md](docs/test-strategy.md), ya integrada por Janeth.
 
 | Comando | Qué verifica |
 | --- | --- |
@@ -91,7 +91,7 @@ La aportación está en `tests/semana-8-integracion-ci`, basada en `develop`. Di
 | `npm run test:legacy` | Suites previas, incluida sincronización de semana 5 |
 | `npm run test:coverage` | Todos los tests Node y cobertura c8 con mapas de código fuente |
 | `npm run test:integration` | Seis casos en Chromium con LocalStorage real, sin servidor personal |
-| `npm run test:e2e` | E2E de interfaz del equipo; falla mientras no existan |
+| `npm run test:e2e` | Seis casos: permisos, flujo offline con recarga, captura guardada y API real idempotente |
 | `make verify` | Todas las etapas, reporte final y salida de error si alguna falla |
 | `npm run verify` | Equivalente exacto de make verify en Windows sin Make |
 
@@ -99,7 +99,7 @@ La aportación está en `tests/semana-8-integracion-ci`, basada en `develop`. Di
 
 ### Fixtures y contrato remoto
 
-Los datos están en `tests/fixtures/inspection.json`. El fixture de navegador empaqueta el `queue.ts` real, intercepta únicamente documento y remoto, y crea un contexto aislado por prueba. La respuesta perdida se simula **después** de aplicar la operación. Se comprueba que dos envíos llevan la misma `Idempotency-Key` y existe un solo registro remoto. El servidor futuro debe implementar ese contrato. El fixture no sustituye el E2E de la interfaz ni prueba un backend desplegado.
+Los datos están en `tests/fixtures/inspection.json`. El fixture de navegador empaqueta el `queue.ts` real, intercepta únicamente documento y remoto, y crea un contexto aislado por prueba. La respuesta perdida se simula **después** de aplicar la operación. Se comprueba que dos envíos llevan la misma `Idempotency-Key` y existe un solo registro remoto. El endpoint sintético de esta ampliación implementa ese contrato y tiene su propia prueba contra el servidor real. El fixture no sustituye el E2E de la interfaz ni prueba un backend desplegado.
 
 ### Reportes y GitHub Actions
 
@@ -114,8 +114,28 @@ La cobertura corresponde a pruebas Node de src/lib y src/components; no mide E2E
 
 ### Contrato E2E para integrar la aportación de Janeth
 
-`playwright.config.mjs` busca `tests/e2e/*.spec.ts`, `.spec.js` o `.spec.mjs`, arranca `npm run start -- --hostname 127.0.0.1 --port 3008`, espera `/inspecciones`, usa `baseURL=http://127.0.0.1:3008` y detiene el servidor al terminar. No reutiliza un servidor personal. Falta implementar creación/captura/sincronización en pantalla, corregir la recarga offline y añadir los dos E2E requeridos. Las unitarias actuales copian funciones dentro del test y deben conectarse a producción. Véase el diagnóstico para los límites de la cola.
+`playwright.config.mjs` busca `tests/e2e/*.spec.ts`, `.spec.js` o `.spec.mjs`, arranca `npm run start -- --hostname 127.0.0.1 --port 3008`, espera `/inspecciones`, usa `baseURL=http://127.0.0.1:3008` y detiene el servidor al terminar. No reutiliza un servidor personal. El formulario, la persistencia, la recarga offline y la sincronización están conectados. Las unitarias de Fátima importan funciones reales; se conservan los E2E de Janeth y se añaden los casos de flujo completo y endpoint. Véase docs/offline-flow.md para límites y decisiones.
 
 ### Evidencia individual y entrega
 
 Consultar la sección de Ulises en `evidence/individual.md`. Los comandos ejecutados por Codex no equivalen a validación humana ya realizada. Revisar personalmente el diff, los tests y sus resultados. Tras el último cambio integrado, copiar `git rev-parse HEAD`, comprobar el mismo SHA en Actions y entregar ese SHA y enlaces en Classroom; no hacer otro commit para escribir el SHA del propio commit. La fecha/hora exactas y el acceso del docente todavía requieren comprobación en Classroom.
+
+## Ampliación: flujo offline completo
+
+La captura en `/inspecciones` guarda texto sintético y encola su operación real.
+Permite recargar sin red, sincroniza al reconectar y ofrece reintento manual.
+`POST /api/inspecciones` persiste registros sintéticos con idempotencia; `GET`
+permite consultar la demostración. El servidor requiere Node y disco con escritura.
+La carpeta `.pwa-data/` está excluida de Git y no es una base de datos de producción.
+No se guardan fotografías ni coordenadas reales. Los límites de cola y concurrencia
+siguen descritos en [docs/offline-flow.md](docs/offline-flow.md).
+
+El flujo antes pendiente ahora está cubierto por `tests/e2e/flujo-offline.spec.ts`.
+También se verifica el endpoint real en `tests/e2e/api-idempotencia.spec.ts` y el
+registro tardío del Service Worker en `tests/unit/sw-registration.spec.mjs`.
+Se conservan las pruebas de Janeth y Fátima. Los E2E usan un archivo sintético por
+proceso de prueba y no requieren cuentas ni permisos físicos del evaluador.
+
+Esta ampliación se integra por PR a **develop**. El SHA aa40394 y sus checks verdes
+corresponden a la versión anterior. La nueva entrega debe identificar el SHA y los
+reportes de la versión ampliada, sin atribuir validación humana a ejecuciones de IA.
