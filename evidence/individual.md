@@ -177,7 +177,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 ## Nombre: Fatima Avelino Celis
 
 - **Contribución:** Implementación de pruebas unitarias para validación de datos e idempotencia en la cola. Archivos modificados y evaluados: `tests/unit/logic.spec.ts`, `src/lib/data/inspections.ts` y `src/lib/sync/queue.ts`.
-- **Enlace a aportación:** 
+- **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/a18ff92bbde97326124bf09b6f9b0add8f4c3429
 - **Decisión técnica y motivo:** Se utilizó el test runner nativo de Node.js (`node:test` y `node:assert/strict`). Se refactorizó el código de pruebas para importar y evaluar las funciones reales del proyecto en lugar de usar simulaciones locales (mocks), inyectando un objeto `localStorage` simulado en memoria para permitir que la lógica de la cola funcione en la terminal de Node.
 - **Prueba/comando que ejecuté:** `node --import ./tests/register-ts-loader.mjs --test tests/unit/logic.spec.ts`. También inyecté un defecto intencional en `src/lib/sync/queue.ts` (modificando la condición para forzar el ingreso de un registro duplicado) para comprobar el fallo.
 - **Resultado observado y enlace al reporte:** Las 4 pruebas pasaron exitosamente comprobando las funciones reales. Al inyectar el defecto controlado, la prueba falló con un `AssertionError (2 !== 1)` como se esperaba, demostrando que la aserción atrapa la regresión. Evidencia en `evidence/defecto-cola.png` y `evidence/recuperacion-cola.png`.
