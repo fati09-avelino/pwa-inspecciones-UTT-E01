@@ -1,0 +1,35 @@
+name: Semana 8 - Evaluación académica
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.0'
+          cache: npm
+      - name: Instalación limpia
+        run: npm ci
+      - name: Instalar Chromium para integración y E2E
+        run: npx playwright install --with-deps chromium
+      - name: Lint, tipos, build, cobertura, integración y E2E
+        run: make verify
+      - name: Conservar reportes incluso con fallos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semana-08-${{ github.sha }}
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            reports/
+            coverage/
+            test-results/
+            evidence/

@@ -24,7 +24,7 @@ En esta iteración se comparan dos estrategias de renderizado, una por ruta:
 
 ## Setup, Ejecución y Verificación
 
-Requisitos: Node.js 20.19 o posterior, npm 10 o posterior y Git.
+Requisitos: Node.js 22.22.x (CI: 22.22.0), npm 10 o posterior y Git.
 
 ### 1. Instalación inmutable
 ```bash
@@ -52,7 +52,7 @@ npm run build
 ```bash
 npm run verify
 ```
-Ejecuta las pruebas y el build, y genera `reports/verification.json`. Un resultado técnico "pass" no es una calificación. También existe el check de estructura: `bash public-tests/check.sh`.
+Ejecuta lint, tipos, build, pruebas con cobertura, integración y E2E, y genera `reports/verification.json`. Un resultado técnico "pass" no es una calificación. También existe el check de estructura: `bash public-tests/check.sh`.
 
 ---
 
@@ -74,3 +74,48 @@ En esta iteración se agregan capacidades opcionales del dispositivo, siempre co
 - **Notificaciones (`src/lib/notifications/client.ts`):** `requestNotificationPermission` y `sendLocalNotification`. Muestran el aviso con el Service Worker si está activo, o con `Notification` en caso contrario. Sin soporte o sin permiso, dejan un aviso en consola y devuelven `false`.
 - **Documentación (`docs/capabilities.md`):** decisiones, permisos y límites de cada capacidad.
 - **Pruebas Automatizadas (`tests/capabilities.spec.ts`):** 26 pruebas de comportamiento. Verifican que importar los módulos no pide permisos, que se piden solo los mínimos, que no se recolectan más datos de los necesarios y que cada fallback funciona sin lanzar errores y capacidades del dispositivo (capabilities.spec.ts).
+
+## Semana 08: integración y CI (Ulises)
+
+La aportación está en `tests/semana-8-integracion-ci`, basada en `develop`. Diagnóstico y coordinación en [docs/semana-08-review.md](docs/semana-08-review.md). La estrategia final del equipo corresponde a `docs/test-strategy.md` (pendiente de Janeth).
+
+| Comando | Qué verifica |
+| --- | --- |
+| `npm ci` | Instalación reproducible del lockfile |
+| `npx playwright install chromium` | Navegador local de pruebas; en Linux CI se añade `--with-deps` |
+| `npm run dev` | Desarrollo en localhost:3000 |
+| `npm run lint` | ESLint de src, sin avisos permitidos |
+| `npm run typecheck` | TypeScript estricto de src, unitarias TS y E2E TS; los históricos JS se ejecutan, no se tipan |
+| `npm run build` | Compilación de producción Next |
+| `npm run test:unit` | Unitarias de Fátima en tests/unit |
+| `npm run test:legacy` | Suites previas, incluida sincronización de semana 5 |
+| `npm run test:coverage` | Todos los tests Node y cobertura c8 con mapas de código fuente |
+| `npm run test:integration` | Seis casos en Chromium con LocalStorage real, sin servidor personal |
+| `npm run test:e2e` | E2E de interfaz del equipo; falla mientras no existan |
+| `make verify` | Todas las etapas, reporte final y salida de error si alguna falla |
+| `npm run verify` | Equivalente exacto de make verify en Windows sin Make |
+
+`npm test` ejecuta las tres capas de pruebas; ejecutar `npm run build` antes para los E2E. El verificador completo hace ese build automáticamente.
+
+### Fixtures y contrato remoto
+
+Los datos están en `tests/fixtures/inspection.json`. El fixture de navegador empaqueta el `queue.ts` real, intercepta únicamente documento y remoto, y crea un contexto aislado por prueba. La respuesta perdida se simula **después** de aplicar la operación. Se comprueba que dos envíos llevan la misma `Idempotency-Key` y existe un solo registro remoto. El servidor futuro debe implementar ese contrato. El fixture no sustituye el E2E de la interfaz ni prueba un backend desplegado.
+
+### Reportes y GitHub Actions
+
+El workflow de semana 2 equivalente se actualizó/movió a `.github/workflows/academic-evaluation.yml`. En cada push/PR instala con `npm ci`, instala Chromium y ejecuta `make verify`. No omite etapas faltantes ni tolera tests ausentes. Los artefactos `semana-08-<SHA>` se conservan 14 días, incluso con fallos:
+
+- `reports/verification.json` y logs de cada etapa.
+- `reports/node/all.xml`, `reports/integration/junit.xml`, `reports/e2e/junit.xml`.
+- Reportes HTML de integración y E2E; traces de fallo en `test-results/`.
+- `coverage/lcov.info`, `coverage/index.html`, `coverage/coverage-summary.json`.
+
+La cobertura corresponde a pruebas Node de src/lib y src/components; no mide E2E ni exige un porcentaje mínimo. Los reportes generados no se versionan. La evidencia pequeña de fallo/corrección está en `evidence/semana08/`.
+
+### Contrato E2E para integrar la aportación de Janeth
+
+`playwright.config.mjs` busca `tests/e2e/*.spec.ts`, `.spec.js` o `.spec.mjs`, arranca `npm run start -- --hostname 127.0.0.1 --port 3008`, espera `/inspecciones`, usa `baseURL=http://127.0.0.1:3008` y detiene el servidor al terminar. No reutiliza un servidor personal. Falta implementar creación/captura/sincronización en pantalla, corregir la recarga offline y añadir los dos E2E requeridos. Las unitarias actuales copian funciones dentro del test y deben conectarse a producción. Véase el diagnóstico para los límites de la cola.
+
+### Evidencia individual y entrega
+
+Consultar la sección de Ulises en `evidence/individual.md`. Los comandos ejecutados por Codex no equivalen a validación humana ya realizada. Revisar personalmente el diff, los tests y sus resultados. Tras el último cambio integrado, copiar `git rev-parse HEAD`, comprobar el mismo SHA en Actions y entregar ese SHA y enlaces en Classroom; no hacer otro commit para escribir el SHA del propio commit. La fecha/hora exactas y el acceso del docente todavía requieren comprobación en Classroom.
