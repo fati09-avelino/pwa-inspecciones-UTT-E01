@@ -11,6 +11,7 @@ export default defineConfig({
   use: { browserName: 'chromium', baseURL: 'http://127.0.0.1:3008', trace: 'retain-on-failure' },
   webServer: {
     command: 'npm run start -- --hostname 127.0.0.1 --port 3008',
+    env: { PWA_SYNTHETIC_STORE: '.pwa-data/e2e-' + process.pid + '.json' },
     url: 'http://127.0.0.1:3008/inspecciones', reuseExistingServer: false, timeout: 120000,
   },
 });

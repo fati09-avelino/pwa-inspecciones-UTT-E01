@@ -11,7 +11,7 @@ Proyecto: PWA de inspecciones y mantenimiento de laboratorios (UTT, Grupo 10 A, 
 | Se pierde la cola al recargar o se duplica al reintentar tras perder una respuesta | Pérdida o duplicación de trabajo en campo | Integración (`tests/integration/sync.spec.mjs`, Chromium + LocalStorage real) |
 | El servidor responde 503 | La sincronización no debe perder datos | Integración |
 | Cámara o ubicación denegadas dejan al usuario bloqueado | No se puede adjuntar evidencia | E2E (`tests/e2e/capacidades-denegadas.spec.ts`) |
-| El flujo completo desde la pantalla (crear, guardar offline, recargar, reconectar, sincronizar una sola vez) falla | Es el flujo crítico del producto | E2E 1: **pendiente**, ver sección 6 |
+| El flujo completo desde la pantalla (crear, guardar offline, recargar, reconectar, sincronizar una sola vez) falla | Es el flujo crítico del producto | E2E real: `tests/e2e/flujo-offline.spec.ts` |
 
 ## 2. Justificación de las capas
 
@@ -24,7 +24,7 @@ Proyecto: PWA de inspecciones y mantenimiento de laboratorios (UTT, Grupo 10 A, 
 - Las pruebas unitarias iniciales (commit `2a75640`) probaban funciones definidas dentro del propio test, no las del proyecto. Pasaban aunque el código real estuviera roto. Se corrigieron en `a18ff92`, que ya importa el código real.
 - Las funciones de cámara, ubicación y avisos existían pero ninguna capa probaba la pantalla; las 26 pruebas de `capabilities.spec.ts` simulan las APIs en Node.
 - Al integrar la rama de CI, `npm run verify` fallaba por faltar `docs/test-strategy.md` y los E2E ejecutables (`tests/e2e/README.md` lo dejaba explícito).
-- `device-actions.tsx` no está conectado a un formulario de captura ni al guardado/sincronización, así que el flujo completo no existe todavía en la interfaz.
+- Inicialmente no existía un formulario conectado a persistencia y cola. La ampliación documentada en `docs/offline-flow.md` incorpora esa captura, el endpoint sintético y la recarga offline real.
 
 ## 4. Evidencia de fallo y recuperación
 
@@ -42,12 +42,12 @@ Proyecto: PWA de inspecciones y mantenimiento de laboratorios (UTT, Grupo 10 A, 
 2. Ubicación denegada: aparece el aviso y la app sigue utilizable.
 3. Ambas denegadas: los dos fallbacks conviven y la captura termina.
 
-## 6. Pendiente y límites
+## 6. Flujo completo y límites
 
-- **E2E 1 (crear, guardar offline, recargar, reconectar, sincronizar sin duplicar): no implementado.** Requiere que la interfaz tenga un formulario conectado a la cola y a la sincronización. Sin eso no hay flujo que probar desde la pantalla; escribir la prueba sobre botones inexistentes sería simularla. Se implementará cuando el equipo conecte captura, persistencia y sincronización.
+- **E2E 1 implementado:** `tests/e2e/flujo-offline.spec.ts` usa el formulario real, corta la red del contexto, recarga offline, reconecta y exige una sola inspección mediante la API real. También guarda una captura tras denegar capacidades. `tests/e2e/api-idempotencia.spec.ts` comprueba reenvío y conflicto contra el endpoint persistente. Véase `docs/offline-flow.md` para decisiones y límites del servidor sintético.
 - Los E2E usan APIs sustituidas en el navegador, no permisos reales del sistema operativo.
 - Solo se prueba Chromium; no se probó en dispositivo móvil físico.
-- El E2E de permisos demuestra los fallbacks, no el guardado de la captura.
+- Los tres E2E originales de permisos demuestran los fallbacks; el nuevo caso de flujo añade una inspección efectivamente guardada. Las fotos y coordenadas no se persisten. El backend JSON es de demostración en un solo proceso Node, no de producción.
 - Los resultados de `npm run verify` y de GitHub Actions se registran en la evidencia individual solo después de ejecutarlos.
 
 ## 7. Cómo ejecutar
