@@ -1,0 +1,96 @@
+
+> pwa-inspecciones-laboratorio@0.1.0 test:integration
+> playwright test --config playwright.integration.config.mjs
+
+
+Running 6 tests using 1 worker
+
+(node:6196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\integration\sync.spec.mjs:2:1 › guardar offline persiste el payload completo tras recargar sin invocar al remoto (2.8s)
+  x  2 tests\integration\sync.spec.mjs:17:1 › respuesta perdida: reintentar la misma operación no duplica el registro remoto (270ms)
+(node:30812) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30812) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 3 tests\integration\sync.spec.mjs:33:1 › HTTP 503 conserva el payload y permite recuperarse después de recargar (962ms)
+  ok 4 tests\integration\sync.spec.mjs:45:1 › encolar dos veces conserva una operación con el último payload (165ms)
+  x  5 tests\integration\sync.spec.mjs:56:1 › dos inspecciones conservan identidades y cuerpos HTTP independientes (227ms)
+(node:30520) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30520) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 6 tests\integration\sync.spec.mjs:67:1 › cada caso inicia con almacenamiento y remoto aislados (886ms)
+
+
+  1) tests\integration\sync.spec.mjs:17:1 › respuesta perdida: reintentar la misma operación no duplica el registro remoto 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 2[39m
+    [31m+ Received  + 2[39m
+
+    [2m  Array [[22m
+    [32m-   "queue-1792948664963-SYNTH-INTEGRATION-008",[39m
+    [32m-   "queue-1792948664963-SYNTH-INTEGRATION-008",[39m
+    [31m+   undefined,[39m
+    [31m+   undefined,[39m
+    [2m  ][22m
+
+      25 |   expect(await sync.process()).toEqual({ processed: 1, failed: 0 });
+      26 |   expect(sync.requests).toHaveLength(2);
+    > 27 |   expect(sync.requests.map(item => item.key)).toEqual([operation.id, operation.id]);
+         |                                               ^
+      28 |   expect(sync.records).toEqual([inspection]);
+      29 |   expect(await sync.read()).toEqual([]);
+      30 |   expect(await sync.process()).toEqual({ processed: 0, failed: 0 });
+        at C:\Users\100199601\Documents\Codex\2026-10-25\quiero-que-revises-la-tarea-en-10\work\pwa\tests\integration\sync.spec.mjs:27:47
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\integration\sync-respuesta-perdida-rei-4dcd7--duplica-el-registro-remoto\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\integration\sync-respuesta-perdida-rei-4dcd7--duplica-el-registro-remoto\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\integration\sync.spec.mjs:56:1 › dos inspecciones conservan identidades y cuerpos HTTP independientes 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m2[39m
+    Received: [31m1[39m
+
+      61 |   expect(await sync.process()).toEqual({ processed: 2, failed: 0 });
+      62 |   expect(sync.requests.map(item => item.method)).toEqual(['POST', 'PUT']);
+    > 63 |   expect(new Set(sync.requests.map(item => item.key)).size).toBe(2);
+         |                                                             ^
+      64 |   expect(sync.records).toEqual([inspection, other]);
+      65 |   expect(await sync.read()).toEqual([]);
+      66 | });
+        at C:\Users\100199601\Documents\Codex\2026-10-25\quiero-que-revises-la-tarea-en-10\work\pwa\tests\integration\sync.spec.mjs:63:61
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\integration\sync-dos-inspecciones-cons-6e584-cuerpos-HTTP-independientes\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\integration\sync-dos-inspecciones-cons-6e584-cuerpos-HTTP-independientes\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests\integration\sync.spec.mjs:17:1 › respuesta perdida: reintentar la misma operación no duplica el registro remoto 
+    tests\integration\sync.spec.mjs:56:1 › dos inspecciones conservan identidades y cuerpos HTTP independientes 
+  4 passed (12.7s)
+
+To open last HTML report run:
+[36m[39m
+[36m  npx playwright show-report reports\integration\html[39m
+[36m[39m
+npm notice
+npm notice New major version of npm available! 10.9.4 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

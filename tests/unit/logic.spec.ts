@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 // 1. SETUP: Mock de localStorage para el entorno de Node.js
 // =====================================================================
 let store: Record<string, string> = {};
-(global as any).window = {}; 
+(global as any).window = {};
 (global as any).localStorage = {
   getItem: (key: string) => store[key] || null,
   setItem: (key: string, value: string) => { store[key] = String(value); },
@@ -36,7 +36,7 @@ describe('Pruebas Unitarias: Flujo Crítico de Inspecciones', () => {
   });
 
   describe('Regla de Idempotencia en la Cola de Sincronización (src/lib/sync/queue.ts)', () => {
-    
+
     beforeEach(() => {
       store = {}; // Limpiamos la memoria antes de cada prueba
     });
@@ -44,7 +44,7 @@ describe('Pruebas Unitarias: Flujo Crítico de Inspecciones', () => {
     it('debe agregar un registro nuevo si la cola está vacía', () => {
       const newPayload: any = { id: 'SYNC-001', summary: 'Datos nuevos' };
       addToSyncQueue(newPayload, 'CREATE');
-      
+
       const currentQueue = getSyncQueue();
       assert.equal(currentQueue.length, 1);
       assert.equal(currentQueue[0].payload.id, 'SYNC-001');
@@ -52,11 +52,11 @@ describe('Pruebas Unitarias: Flujo Crítico de Inspecciones', () => {
 
     it('NO debe duplicar el registro si el mismo ID ya existe en la cola (Idempotencia)', () => {
       const payload: any = { id: 'SYNC-001', summary: 'Datos' };
-      
+
       // Simulamos que el usuario presiona el botón "Guardar" dos veces rápido
       addToSyncQueue(payload, 'CREATE');
       addToSyncQueue(payload, 'CREATE');
-      
+
       const currentQueue = getSyncQueue();
       assert.equal(currentQueue.length, 1); // La cola evita el duplicado
     });

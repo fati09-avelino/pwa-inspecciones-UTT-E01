@@ -7,3 +7,8 @@ coverage/
 !.env.example
 reports/verification.json
 
+
+reports/
+test-results/
+playwright-report/
+*.tsbuildinfo
