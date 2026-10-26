@@ -49,3 +49,11 @@ export const inspections: Inspection[] = [
     findings: 'Se requiere reiniciar un nodo esclavo por latencia en el routing mesh.' // <--- Añadir valor
   }
 ];
+/**
+ * Valida que una inspección cuente con los campos obligatorios mínimos.
+ */
+export function validateInspection(data: any): boolean {
+  if (!data.id || data.id.trim() === '') return false;
+  if (!data.laboratory || data.laboratory.trim() === '') return false;
+  return true;
+}
