@@ -75,7 +75,10 @@ export async function load(url, context, nextLoad) {
         module: ts.ModuleKind.ESNext,
         target: ts.ScriptTarget.ES2022,
         jsx: ts.JsxEmit.ReactJSX,
-        esModuleInterop: true
+        esModuleInterop: true,
+        sourceMap: false,
+        inlineSourceMap: true,
+        inlineSources: true
       }
     });
     return { format: "module", source: outputText, shortCircuit: true };

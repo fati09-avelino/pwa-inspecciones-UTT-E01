@@ -85,7 +85,9 @@ export async function processSyncQueue(
         // Simulación predeterminada de envío al endpoint
         const response = await fetch(item.endpoint, {
           method: item.action === 'CREATE' ? 'POST' : item.action === 'DELETE' ? 'DELETE' : 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          // La identidad persistida se conserva entre intentos y recargas.
+          // El servidor debe implementar el contrato de Idempotency-Key.
+          headers: { 'Content-Type': 'application/json', 'Idempotency-Key': item.id },
           body: JSON.stringify(item.payload)
         });
         success = response.ok;

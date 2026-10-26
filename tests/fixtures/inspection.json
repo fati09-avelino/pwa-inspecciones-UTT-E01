@@ -1,0 +1,11 @@
+{
+  "id": "SYNTH-INTEGRATION-008",
+  "title": "Inspección sintética",
+  "status": "Pendiente",
+  "statusLabel": "Pendiente",
+  "location": "Laboratorio simulado A",
+  "summary": "Prueba de almacenamiento y red",
+  "findings": "Hallazgo sintético sin datos personales",
+  "updatedAt": "2026-10-25T12:00:00.000Z",
+  "version": 1
+}
