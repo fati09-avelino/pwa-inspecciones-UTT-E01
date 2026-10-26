@@ -41,7 +41,7 @@ Abre http://localhost:3000. Rutas principales: `/` (pantalla inicial), `/inspecc
 ```bash
 npm run test
 ```
-Ejecuta, en orden: starter, manifiesto, Service Worker, comportamiento offline, renderizado CSR/SSR y sincronización (`sync.spec.ts`).
+Ejecuta las pruebas Node con cobertura (incluidas unitarias y suites anteriores), integración y E2E. Antes de los E2E se necesita `npm run build`; `npm run verify` realiza ese build automáticamente.
 
 ### 4. Build de producción
 ```bash
@@ -64,7 +64,7 @@ Ejecuta lint, tipos, build, pruebas con cobertura, integración y E2E, y genera 
 
 ## Flujo de trabajo
 
-El trabajo se hace en ramas (`feature/...` o `fix/...`) y se integra a `main` mediante Pull Request; no se sube directo a `main`.
+El trabajo se hace en ramas propias y se integra primero a `develop` mediante Pull Request. Esta aportación usa `tests/semana-8-integracion-ci` y el PR #25 con base `develop`. Cualquier promoción posterior a `main` se revisa por separado; no se hacen cambios directos en ninguna de las dos ramas compartidas.
 
 ## Arquitectura de la Semana 06: Capacidades del Dispositivo y Notificaciones
 
@@ -114,7 +114,7 @@ La cobertura corresponde a pruebas Node de src/lib y src/components; no mide E2E
 
 ### Contrato E2E para integrar la aportación de Janeth
 
-`playwright.config.mjs` busca `tests/e2e/*.spec.ts`, `.spec.js` o `.spec.mjs`, arranca `npm run start -- --hostname 127.0.0.1 --port 3008`, espera `/inspecciones`, usa `baseURL=http://127.0.0.1:3008` y detiene el servidor al terminar. No reutiliza un servidor personal. Falta implementar creación/captura/sincronización en pantalla, corregir la recarga offline y añadir los dos E2E requeridos. Las unitarias actuales copian funciones dentro del test y deben conectarse a producción. Véase el diagnóstico para los límites de la cola.
+`playwright.config.mjs` busca `tests/e2e/*.spec.ts`, `.spec.js` o `.spec.mjs`, arranca `npm run start -- --hostname 127.0.0.1 --port 3008`, espera `/inspecciones`, usa `baseURL=http://127.0.0.1:3008` y detiene el servidor al terminar. No reutiliza un servidor personal. Falta implementar creación/captura/sincronización en pantalla, corregir la recarga offline y añadir los dos E2E requeridos. Las unitarias de Fátima ya importan `validateInspection` y la cola reales; su corrección llegó desde `develop` mediante los PR #26 y #27. La validación todavía debe conectarse al formulario cuando exista el flujo de captura. Véase el diagnóstico para los límites de la cola.
 
 ### Evidencia individual y entrega
 

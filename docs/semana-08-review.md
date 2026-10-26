@@ -2,7 +2,7 @@
 
 Fecha de revisión: 25 de octubre de 2026 (Ciudad de México).
 Repositorio: https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01
-Base revisada: develop, b474d68. Rama de aportación: tests/semana-8-integracion-ci.
+Base inicial: develop, b474d68. Actualización incorporada: develop, 3fbc707 (PR #26 y #27 de Fátima). Rama de aportación: tests/semana-8-integracion-ci; destino del PR #25: develop.
 
 ## Alcance y fuentes
 
@@ -28,9 +28,7 @@ individual siguen pendientes de confirmación humana.
 - Tras tres fallos, la cola elimina la operación. Quedan fuera de esta aportación:
   recuperación manual, concurrencia entre pestañas y cambios de payload después de que
   el remoto haya aplicado una operación cuya respuesta se perdió.
-- Las pruebas unitarias de Fátima definen validateInspection y addToSyncQueue dentro
-  del test. Pasarlas no demuestra que la PWA valide ni deduplique. Las capturas existentes
-  deben contrastarse con un defecto en código realmente consumido por la aplicación.
+- Las unitarias de Fátima inicialmente contenían funciones copiadas. La corrección incorporada desde develop importa validateInspection de src/lib/data/inspections.ts y addToSyncQueue/getSyncQueue de src/lib/sync/queue.ts. Las cuatro pruebas evalúan esas funciones reales. Sigue pendiente conectar la validación al flujo de captura de la interfaz.
 - El npm test anterior omitía tests/sync.spec.ts y tests/unit/logic.spec.ts.
 - Los tests históricos .ts son JavaScript ejecutado mediante un loader de transpilación,
   con globals simuladas sin tipado TS. Incluirlos en tsc estricto producía errores.
@@ -67,7 +65,7 @@ individual siguen pendientes de confirmación humana.
 | Guardar offline persiste | Ulises | Integración comprobada con LocalStorage real |
 | Reintentar sin duplicar remoto | Ulises | Comprobado con respuesta perdida y clave estable |
 | Lint, tipos, build, reportes y CI | Ulises | Configurados; consultar resultados reales del SHA |
-| Validación e idempotencia unitaria | Fátima | Sustituir funciones copiadas por imports de producción |
+| Validación e idempotencia unitaria | Fátima | Corregidas e incorporadas desde develop; importan funciones reales |
 | Crear inspección desde pantalla | Equipo | Implementar consumidor de persistencia y cola |
 | Recarga completamente offline | Equipo | Corregir y comprobar shell/chunks con navegador |
 | E2E normal y capacidad denegada | Janeth | Añadir pruebas Playwright reales en tests/e2e/ |
@@ -91,7 +89,7 @@ ni idempotencia de un backend real. El endpoint futuro debe respetar el mismo co
 
 ## Antes de entregar
 
-Integrar por PR, nunca por cambios directos a main. El CI debe fallar mientras falten
+Integrar primero por PR a develop, nunca por cambios directos a develop o main. El CI debe fallar mientras falten
 docs/test-strategy.md o tests E2E: no usar --pass-with-no-tests ni --if-present para ocultarlo.
 Una ejecución verde tampoco valida por sí misma que las unitarias prueben producción.
 Tras integrar todas las contribuciones, ejecutar CI del SHA común y entregar ese SHA
@@ -105,3 +103,11 @@ La instalación limpia terminó con código 0. `npm audit` reportó 6 vulnerabil
 ## Comprobación local completa
 
 `npm ci` terminó con código 0. La compilación directa `node node_modules/next/dist/bin/next build` terminó con código 0. El wrapper completo `npm run verify` conservó un fallo EPERM de escritura en .next al invocar el build desde este entorno restringido de Windows, y un fallo E2E (ausencia de tests; se observó también un puerto retenido por una ejecución anterior, ya detenida). No se marca la verificación global como aprobada. La ejecución de Actions en Linux es la comprobación independiente del mismo código.
+
+## Actualización de la rama de Ulises
+
+Se incorporan los cuatro commits nuevos de develop conservando la evidencia revisada de Fátima y la sección completa de Ulises. El conflicto de evidence/individual.md se resuelve combinando ambas secciones, sin aceptar un lado completo y perder la otra aportación. No se integra el PR #25 a develop ni se modifica main. La estrategia, los E2E y el flujo común siguen pendientes hasta que sus archivos y pruebas estén integrados.
+
+### Comprobación después de incorporar develop
+
+Sobre el proyecto de Descargas se ejecutaron las etapas directamente con Node: lint sin avisos, tipos sin errores, 79 pruebas Node y 6 de integración aprobadas, y build de Next terminado con código 0. Los comandos directos fueron node scripts/test-node.mjs, node node_modules/next/dist/bin/next lint --dir src --max-warnings 0, node node_modules/typescript/bin/tsc --noEmit, node node_modules/@playwright/test/cli.js test --config playwright.integration.config.mjs y node node_modules/next/dist/bin/next build. npm ci volvió a encontrar EPERM; se restauraron dependencias desde la copia previamente instalada cuyo package-lock.json tiene el mismo hash. El wrapper npm run verify se interrumpió al quedar detenido en lint en este entorno; no se declara aprobado. La comprobación de estructura encontró pendiente docs/test-strategy.md y el listado E2E encontró cero tests. La validación humana de Ulises sigue pendiente; estos comandos los ejecutó Codex.
