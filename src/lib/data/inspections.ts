@@ -1,3 +1,5 @@
+import { sanitizeInput } from '../security/index';
+
 export interface Inspection {
   id: string;
   laboratory: string;
@@ -55,5 +57,11 @@ export const inspections: Inspection[] = [
 export function validateInspection(data: any): boolean {
   if (!data.id || data.id.trim() === '') return false;
   if (!data.laboratory || data.laboratory.trim() === '') return false;
+
+  // Sanitizar entradas de texto libre para bloquear XSS
+  if (data.notes) data.notes = sanitizeInput(data.notes);
+  if (data.findings) data.findings = sanitizeInput(data.findings);
+
   return true;
 }
+

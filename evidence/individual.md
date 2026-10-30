@@ -240,3 +240,13 @@ c52bede963c39512da610b272a1c0a1acae830d5
 - IA: Codex (OpenAI) escribió y probó la ampliación con autorización de Ulises. La validación humana de Ulises sigue pendiente hasta que revise y reproduzca sus resultados. Se conservan las contribuciones de Fátima y Janeth; no se atribuye esta ampliación a ellas.
 - Limitación: servidor JSON de un solo proceso, cola con límite de tres intentos, sin persistencia de fotos/coordenadas ni garantía entre pestañas. La entrega anterior aa40394 no contiene esta ampliación.
 - Resultado observado por Codex: 80 pruebas Node con cobertura, 6 de integración y 6 E2E aprobados (5 de interfaz y 1 del endpoint real), build/lint/tipos correctos. Salida: evidence/semana08/flujo-completo.txt. Los E2E locales reutilizaron el servidor de producción porque el wrapper de arranque quedó retenido en este entorno; CI debe verificar el arranque completo independiente.
+
+## Semana 09 - Modelo de amenazas y privacidad aplicada
+
+- **Estudiante:** Fatima Avelino Celis
+- **Commit SHA evaluado:** 
+- **Decisión técnica que puedo explicar:** Implementé un Content Security Policy (CSP) en `next.config.mjs` y una función de sanitización pura (`sanitizeInput`) integrada en `validateInspection` para neutralizar ataques XSS antes de persistir los datos de las inspecciones.
+- **Prueba que ejecuté y resultado:** Ejecuté `node --import ./tests/register-ts-loader.mjs --test tests/security.spec.ts`. El resultado fue exitoso al escapar el código malicioso. Al comentar temporalmente la sanitización, la prueba falló correctamente con un `AssertionError (true !== false)`.
+- **Limitación o fallo diagnosticado:** La función convierte todos los caracteres HTML en entidades seguras. La limitación es que no admite formato enriquecido; si en el futuro se implementa un editor visual (WYSIWYG), este sanitizador rompería la estructura del texto.
+- **Cambio que podría defender o modificar en vivo:** Puedo comentar la línea del sanitizador en el archivo `inspections.ts` y correr el script de prueba para demostrar cómo la aserción atrapa la vulnerabilidad en tiempo real.
+- **Uso declarado de IA (herramienta, propósito, validación):** Gemini. Propósito: Estructurar la configuración de cabeceras HTTP para el CSP y definir las aserciones de las pruebas unitarias. Validación: Modifiqué el código fuente manualmente para forzar un fallo y comprobé el comportamiento real ejecutando los comandos en mi terminal.
