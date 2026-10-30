@@ -244,7 +244,7 @@ c52bede963c39512da610b272a1c0a1acae830d5
 ## Semana 09 - Modelo de amenazas y privacidad aplicada
 
 - **Estudiante:** Fatima Avelino Celis
-- **Commit SHA evaluado:** 
+- **Enlace a aportación:** https://github.com/fati09-avelino/pwa-inspecciones-UTT-E01/commit/5c96a53f1963a034c5a98725ba17412fa507ac4c
 - **Decisión técnica que puedo explicar:** Implementé un Content Security Policy (CSP) en `next.config.mjs` y una función de sanitización pura (`sanitizeInput`) integrada en `validateInspection` para neutralizar ataques XSS antes de persistir los datos de las inspecciones.
 - **Prueba que ejecuté y resultado:** Ejecuté `node --import ./tests/register-ts-loader.mjs --test tests/security.spec.ts`. El resultado fue exitoso al escapar el código malicioso. Al comentar temporalmente la sanitización, la prueba falló correctamente con un `AssertionError (true !== false)`.
 - **Limitación o fallo diagnosticado:** La función convierte todos los caracteres HTML en entidades seguras. La limitación es que no admite formato enriquecido; si en el futuro se implementa un editor visual (WYSIWYG), este sanitizador rompería la estructura del texto.
