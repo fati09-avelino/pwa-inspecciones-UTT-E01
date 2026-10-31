@@ -14,3 +14,4 @@ playwright-report/
 *.tsbuildinfo
 
 .pwa-data/
+evaluation-result.json
