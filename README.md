@@ -2,6 +2,84 @@
 
 Proyecto integrador correspondiente a la materia de PWA (Grupo 10 A - Equipo 1). Usa exclusivamente datos sintéticos.
 
+## Semana 9 · Seguridad, privacidad y CI
+
+La aportación de Ulises parte de `develop` con la seguridad de Fátima integrada
+(base `c7a8fe7`). [Modelo de amenazas](docs/threat-model.md): activos, flujos y
+fronteras de confianza, 11 escenarios STRIDE priorizados, controles comprobados,
+decisiones y riesgos pendientes. La sanitización y cabeceras son de Fátima;
+el inventario de privacidad y `robots.txt` corresponden a Janeth en su propia rama.
+
+### Instalación y verificación reproducible
+
+Requisitos: Node **22.22.0**, npm 10 o superior y Chromium de Playwright.
+Desde la raíz del repositorio:
+
+```sh
+npm ci
+npx playwright install chromium
+npm run test:security
+make verify
+npm run verify:w09
+```
+
+En Windows sin GNU Make, `npm run verify` es el equivalente exacto de
+`make verify` (mismo `scripts/verify.mjs`). En Linux CI se instala Chromium con
+`npx playwright install --with-deps chromium`.
+La verificación completa ejecuta lint, tipos, build, pruebas Node con cobertura,
+integración y todos los E2E. Para repetir únicamente los tres nuevos escenarios:
+
+```sh
+npm run build
+npm run test:e2e -- tests/e2e/security-boundaries.spec.ts
+npm audit --omit=dev --json
+```
+
+`test:security` ejecuta las dos pruebas reales de Fátima; también están incluidas
+en la suite Node general. Los nuevos E2E comprueban cabeceras HTTP y bloqueo CSP
+de un script externo, entradas maliciosas renderizadas como texto después de
+guardar/recargar y rechazo API de JSON inválido/datos excesivos sin persistirlos.
+No prueban autenticación, un pentest completo ni privacidad en dispositivos físicos.
+
+### Workflow y evidencia
+
+`.github/workflows/week-09-w09-security-privacy.yml` corre en push a ramas de
+trabajo/develop, en PR **hacia develop** y manualmente. Instala desde lockfile,
+ejecuta seguridad y verificación completa, y guarda reportes/trazas/cobertura
+durante 14 días incluso al fallar. Usa permisos de lectura, acciones fijadas por
+SHA, checkout sin credenciales persistentes, sin secretos ni despliegues.
+`reports/week09-context.json` identifica el SHA fuente y el evaluado (en PR puede
+ser un merge temporal), además de la URL de Actions.
+
+`npm run verify:w09` repite la verificación completa y comprueba entregables no
+vacíos de Semana 9. Genera `evaluation-result.json` con SHA, estado y límites;
+no asigna calificación ni simula los checks privados. Para diagnosticar solo la
+estructura: `node scripts/verify-week09.mjs --structure`. Los archivos de Janeth
+deben integrarse antes de obtener aprobación global; no se crean archivos vacíos
+para aparentar que están terminados.
+
+La auditoría npm es **informativa**, con advertencia y JSON conservado si detecta
+hallazgos o no puede ejecutarse; las pruebas y build sí son bloqueantes. El
+diagnóstico inicial del 30-10-2026 reportó 3 dependencias de producción vulnerables
+(1 crítica: Next; 2 altas: postcss y source-map-js). Es un resultado del registro
+en esa fecha, no una lista inmutable. No se ejecuta `npm audit fix --force`: la
+solución propuesta migra Next de versión mayor y requiere un PR específico.
+Un resultado verde no elimina esos pendientes. Consultar el JSON del SHA entregado.
+
+Evidencia individual: [sección Semana 9 de Ulises](evidence/individual.md).
+Cada integrante trabaja desde `develop` actualizado en su rama y abre PR hacia
+`develop`; no se permiten commits ni fusiones directas a `main`.
+La revisión humana de Ulises debe registrarse cuando realmente la haya hecho.
+
+### Límites de seguridad conocidos
+
+La API sintética no autentica ni autoriza usuarios; LocalStorage no está cifrado
+ni protegido frente a scripts del mismo origen; CSP permite inline/eval; no hay
+cuotas de almacenamiento ni rate limiting. El archivo JSON funciona en un solo
+proceso. No introducir información personal, secretos ni fotografías reales.
+El `robots.txt` de Janeth no será un control de acceso. Las mitigaciones pendientes
+y sus responsables propuestos están identificados en el modelo.
+
 ## Arquitectura de la Semana 05: Persistencia Offline y Sincronización
 
 En esta iteración se agrega la capa de datos offline y la sincronización diferida con el servidor:
