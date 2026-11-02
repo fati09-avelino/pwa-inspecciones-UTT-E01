@@ -8,11 +8,13 @@
     "start": "next start",
     "test": "npm run test:coverage && npm run test:integration && npm run test:e2e",
     "verify": "node scripts/verify.mjs",
+    "verify:w09": "node scripts/verify-week09.mjs",
     "lint": "next lint --dir src --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test:legacy": "node scripts/test-node.mjs legacy",
     "test:unit": "node scripts/test-node.mjs unit",
     "test:node": "node scripts/test-node.mjs",
+    "test:security": "node --import ./tests/register-ts-loader.mjs --test tests/security.spec.ts",
     "test:coverage": "c8 node scripts/test-node.mjs",
     "test:integration": "playwright test --config playwright.integration.config.mjs",
     "test:e2e": "playwright test --config playwright.config.mjs"

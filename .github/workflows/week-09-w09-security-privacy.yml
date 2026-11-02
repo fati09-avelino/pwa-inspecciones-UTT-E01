@@ -1,0 +1,70 @@
+name: Semana 9 - Seguridad y privacidad
+
+on:
+  push:
+    branches: [develop, 'feature/**', 'fix/**', 'docs/**', 'tests/**']
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: w09-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security-privacy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.22.0'
+          cache: npm
+      - name: Instalación limpia
+        run: npm ci
+      - name: Seguridad de Fátima (código real)
+        run: npm run test:security
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Verificación completa y E2E de fronteras de seguridad
+        run: npm run verify:w09
+      # Diagnóstico visible; no equivale a una aprobación de seguridad.
+      - name: Auditar dependencias de producción (informativo)
+        id: audit
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          mkdir -p reports
+          npm audit --omit=dev --json > reports/npm-audit-w09.json
+      - name: Advertir auditoría pendiente
+        if: ${{ !cancelled() && steps.audit.outcome == 'failure' }}
+        run: echo '::warning::La auditoría detectó vulnerabilidades o no pudo completarse. Consultar npm-audit-w09.json; CI verde no certifica ausencia de riesgos.'
+      - name: Evidencia del commit evaluado
+        if: ${{ !cancelled() }}
+        env:
+          EVALUATED_SHA: ${{ github.sha }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir -p reports
+          node -e 'require("node:fs").writeFileSync("reports/week09-context.json", JSON.stringify({evaluatedSha:process.env.EVALUATED_SHA,sourceSha:process.env.SOURCE_SHA,runUrl:process.env.RUN_URL,node:process.version},null,2))'
+      - name: Conservar reportes incluso si hay fallos
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: semana-09-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            evaluation-result.json
+            reports/
+            coverage/
+            test-results/
