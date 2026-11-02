@@ -1,0 +1,5 @@
+# robots.txt: pide a los rastreadores que no indexen estas rutas.
+# No es un control de acceso ni sustituye a la autenticación.
+User-agent: *
+Disallow: /api/
+Disallow: /inspecciones
