@@ -72,4 +72,4 @@ Probabilidad e impacto: 1 bajo, 2 medio, 3 alto. Producto 6–9 = alta, 3–4 = 
 - [OWASP Threat Modeling Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html): modelar flujos/fronteras, identificar riesgos, mitigar y revisar. La matriz anterior es nuestro análisis del código.
 - [GitHub: Security hardening for GitHub Actions](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions): permisos mínimos, entradas no confiables y acciones fijadas por commit.
 
-Documento preparado con Codex; Ulises debe revisar y comprender sus decisiones y comprobarlas antes de atribuirse validación humana. El inventario de privacidad de Janeth es una dependencia separada y no se declara terminado aquí.
+Documento preparado con Codex; Ulises debe revisar y comprender sus decisiones y comprobarlas antes de atribuirse validación humana. El inventario de privacidad y robots de Janeth se incorporaron desde develop el 01-11-2026. Este modelo conserva la base original de análisis y los riesgos pendientes; la comprobación del conjunto se identifica por el SHA del reporte de CI.

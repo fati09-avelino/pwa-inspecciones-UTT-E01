@@ -8,7 +8,8 @@ La aportación de Ulises parte de `develop` con la seguridad de Fátima integrad
 (base `c7a8fe7`). [Modelo de amenazas](docs/threat-model.md): activos, flujos y
 fronteras de confianza, 11 escenarios STRIDE priorizados, controles comprobados,
 decisiones y riesgos pendientes. La sanitización y cabeceras son de Fátima;
-el inventario de privacidad y `robots.txt` corresponden a Janeth en su propia rama.
+el inventario de privacidad y `robots.txt` de Janeth ya están incorporados desde
+`develop`. Las tres aportaciones se reúnen en el PR #32.
 
 ### Instalación y verificación reproducible
 
@@ -54,9 +55,8 @@ ser un merge temporal), además de la URL de Actions.
 `npm run verify:w09` repite la verificación completa y comprueba entregables no
 vacíos de Semana 9. Genera `evaluation-result.json` con SHA, estado y límites;
 no asigna calificación ni simula los checks privados. Para diagnosticar solo la
-estructura: `node scripts/verify-week09.mjs --structure`. Los archivos de Janeth
-deben integrarse antes de obtener aprobación global; no se crean archivos vacíos
-para aparentar que están terminados.
+estructura: `node scripts/verify-week09.mjs --structure`. El inventario y robots
+de Janeth ya están integrados; el reporte debe corresponder al SHA combinado.
 
 La auditoría npm es **informativa**, con advertencia y JSON conservado si detecta
 hallazgos o no puede ejecutarse; las pruebas y build sí son bloqueantes. El
